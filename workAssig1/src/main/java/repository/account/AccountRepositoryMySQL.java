@@ -1,8 +1,13 @@
 package repository.account;
 
 import model.Account;
+import model.Role;
 import model.builders.AccountBuilder;
 import repository.EntityNotFoundException;
+
+import static database.Constants.Tables.USER_ROLE;
+import static database.Constants.Tables.CLIENT_ACCOUNT;
+import static database.Constants.Tables.ROLE_RIGHT;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -35,7 +40,6 @@ public class AccountRepositoryMySQL implements AccountRepository {
         return accounts;
     }
 
-    @Override
     public Account findById(Long id) throws EntityNotFoundException {
         try {
             Statement statement = connection.createStatement();
@@ -53,22 +57,36 @@ public class AccountRepositoryMySQL implements AccountRepository {
         }
     }
 
-    @Override
-    public boolean save(Account account) {
+    private Long saveAccount(Account account) {
         try {
             PreparedStatement insertStatement = connection
-                    .prepareStatement("INSERT INTO book values (null, ?, ?, ?)");
+                    .prepareStatement("INSERT INTO account values (null, ?, ?, ?)");
             insertStatement.setString(1, account.getType());
             insertStatement.setFloat(2, account.getBalance());
             insertStatement.setDate(3, new java.sql.Date(account.getCreationDate().getTime()));
-            insertStatement.executeUpdate();
-            return true;
+            ResultSet rs=insertStatement.executeQuery();
+            rs.next();
+            return rs.getLong(1);
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
+    public boolean addAccountToClient(Account account, Long clientId) {
+    	Long accountId = saveAccount(account);
+    	try {
+            PreparedStatement insertStatement = connection
+                    .prepareStatement("INSERT IGNORE INTO " + CLIENT_ACCOUNT + " values (null, ?, ?)");
+            insertStatement.setLong(1, clientId);
+            insertStatement.setLong(2, accountId);
+            insertStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+        		return false;
+        }
+    }
+    
     @Override
     public void removeAll() {
         try {
@@ -88,5 +106,22 @@ public class AccountRepositoryMySQL implements AccountRepository {
                 .setCreationDate(new Date(rs.getDate("creationDate").getTime()))
                 .build();
     }
-
+    
+    @Override
+    public List<Account> findAccountsForClient(Long clientId) {
+        try {
+            List<Account> accounts = new ArrayList<>();
+            Statement statement = connection.createStatement();
+            String fetchAccountSql = "Select * from " + CLIENT_ACCOUNT + " where `client_id`=\'" + clientId + "\'";
+            ResultSet userRoleResultSet = statement.executeQuery(fetchAccountSql);
+            while (userRoleResultSet.next()) {
+                long accountId = userRoleResultSet.getLong("role_id");
+                accounts.add(findById(accountId));
+            }
+            return accounts;
+        } catch (SQLException | EntityNotFoundException e) {
+        return null;
+    }
+    }
 }
+

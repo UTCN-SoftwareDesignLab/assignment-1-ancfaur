@@ -12,6 +12,12 @@ public class ClientBuilder {
 		client = new Client();
 	}
 	
+	public ClientBuilder setId(Long id) {
+		client.setId(id);
+		return this;
+	}
+	
+	
 	public ClientBuilder setCnp(String cnp) {
 		client.setCnp(cnp);
 		return this;

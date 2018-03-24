@@ -87,10 +87,31 @@ public class SQLTableCreationFactory {
                 "  cnp VARCHAR(13) NOT NULL," +
                 "  name VARCHAR(100) NOT NULL," +
                 "  address VARCHAR(200) NOT NULL," +
-                "  id_card INT NULL,"+
+                "  idCard INT NULL,"+
                 "  PRIMARY KEY (id)," +
                 "  UNIQUE INDEX id_UNIQUE (id ASC)," +
                 "  UNIQUE INDEX cnp_UNIQUE (name ASC));";
+            	
+            case CLIENT_ACCOUNT:
+                return "  CREATE TABLE IF NOT EXISTS client_account (" +
+                        "  id INT NOT NULL AUTO_INCREMENT," +
+                        "  client_id INT NOT NULL," +
+                        "  account_id INT NOT NULL," +
+                        "  PRIMARY KEY (id)," +
+                        "  UNIQUE INDEX id_UNIQUE (id ASC)," +
+                        "  INDEX client_id_idx (client_id ASC)," +
+                        "  INDEX client_id_idx (client_id ASC)," +
+                        "  CONSTRAINT client_id" +
+                        "    FOREIGN KEY (client_id)" +
+                        "    REFERENCES client (id)" +
+                        "    ON DELETE CASCADE" +
+                        "    ON UPDATE CASCADE," +
+                        "  CONSTRAINT account_id" +
+                        "    FOREIGN KEY (account_id)" +
+                        "    REFERENCES `account` (id)" +
+                        "    ON DELETE CASCADE" +
+                        "    ON UPDATE CASCADE);";
+
             default:
                 return "";
 

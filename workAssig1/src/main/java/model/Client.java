@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Client {
 
+	private Long id;
 	private String cnp;
 	private String name;
 	private String address;
@@ -12,6 +13,14 @@ public class Client {
 	private List<Account> accounts;
 
 	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getCnp() {
 		return cnp;

@@ -23,6 +23,9 @@ public class Bootstrap {
 	        bootstrapTables();
 
 	        bootstrapUserData();
+	       
+	        
+	        
 	    }
 
 	    private static void dropAll() throws SQLException {
@@ -40,10 +43,12 @@ public class Bootstrap {
 	                    
 	                    "TRUNCATE `user_role`; \n" ,
 	                    "DROP TABLE `user_role`; \n" ,
-	                    
-	                    
+	                    	                    
 	                    "TRUNCATE `role`; \n" ,
 	                    "DROP TABLE `role`",
+	                    
+	                    "TRUNCATE `client_account`; \n",
+	                    "DROP TABLE `client_account`",
 	                    
 	                    "TRUNCATE `account`; \n",
 	                    "DROP TABLE `account`",
@@ -123,7 +128,8 @@ public class Bootstrap {
 	    }
 
 	    private static void bootstrapUserRoles() throws SQLException {
-
 	    }
+	    
+
 }
 
