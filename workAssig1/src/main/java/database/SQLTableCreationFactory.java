@@ -41,7 +41,6 @@ public class SQLTableCreationFactory {
                         "  PRIMARY KEY (`id`)," +
                         "  UNIQUE INDEX `id_UNIQUE` (`id` ASC)," +
                         "  UNIQUE INDEX `right_UNIQUE` (`right` ASC));";
-
             case ROLE_RIGHT:
                 return "  CREATE TABLE IF NOT EXISTS role_right (" +
                         "  id INT NOT NULL AUTO_INCREMENT," +
@@ -100,7 +99,7 @@ public class SQLTableCreationFactory {
                         "  PRIMARY KEY (id)," +
                         "  UNIQUE INDEX id_UNIQUE (id ASC)," +
                         "  INDEX client_id_idx (client_id ASC)," +
-                        "  INDEX client_id_idx (client_id ASC)," +
+                        "  INDEX account_id_idx (account_id ASC)," +
                         "  CONSTRAINT client_id" +
                         "    FOREIGN KEY (client_id)" +
                         "    REFERENCES client (id)" +
@@ -111,7 +110,6 @@ public class SQLTableCreationFactory {
                         "    REFERENCES `account` (id)" +
                         "    ON DELETE CASCADE" +
                         "    ON UPDATE CASCADE);";
-
             default:
                 return "";
 

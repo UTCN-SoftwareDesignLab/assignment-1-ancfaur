@@ -39,4 +39,16 @@ public class User {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+    
+    public String showListRoles() {
+    	if (roles==null) return "no roles added!!";
+    	if (roles.size()==0) return "user with empty roles set!";
+    	String listRoles =  roles.get(0).getRole();
+    	if (roles.size()==1) return listRoles;
+    	else
+    		for (Role role: roles) {
+    			listRoles += " , "+ role.getRole();
+    		}
+    	return listRoles;
+    }
 }

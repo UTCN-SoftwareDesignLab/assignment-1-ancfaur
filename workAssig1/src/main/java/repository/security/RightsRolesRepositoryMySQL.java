@@ -99,7 +99,8 @@ public class RightsRolesRepositoryMySQL implements RightsRolesRepository {
 
     @Override
     public void addRolesToUser(User user, List<Role> roles) {
-        try {
+       System.out.println("sunt chemat sa inserez roles to users");
+    	try {
             for (Role role : roles) {
                 PreparedStatement insertUserRoleStatement = connection
                         .prepareStatement("INSERT INTO `user_role` values (null, ?, ?)");

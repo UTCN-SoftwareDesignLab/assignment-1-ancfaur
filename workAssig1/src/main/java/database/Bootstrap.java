@@ -2,20 +2,33 @@ package database;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 
+import repository.user.UserRepository;
+import repository.user.UserRepositoryMySQL;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import model.Role;
+import model.User;
 
 import static database.Constants.Rights.RIGHTS;
 import static database.Constants.Roles.ROLES;
 import static database.Constants.Schemas.SCHEMAS;
 import static database.Constants.getRolesRights;
+import static database.Constants.getPredefinedUsers;
+
+import service.user.AuthenticationService;
+import service.user.AuthenticationServiceMySQL;
 
 public class Bootstrap {
 	
 	    private static RightsRolesRepository rightsRolesRepository;
+	    private static UserRepository userRepository;
 
 	    public static void main(String[] args) throws SQLException {
 	        dropAll();
@@ -23,9 +36,7 @@ public class Bootstrap {
 	        bootstrapTables();
 
 	        bootstrapUserData();
-	       
-	        
-	        
+ 
 	    }
 
 	    private static void dropAll() throws SQLException {
@@ -81,6 +92,7 @@ public class Bootstrap {
 
 	            for (String table : Constants.Tables.ORDERED_TABLES_FOR_CREATION) {
 	                String createTableSQL = sqlTableCreationFactory.getCreateSQLForTable(table);
+	                System.out.println("incerc sa fac: "+table);
 	                statement.execute(createTableSQL);
 	            }
 	        System.out.println("Done table bootstrap in "+schema);
@@ -93,7 +105,8 @@ public class Bootstrap {
 
 	            JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper(schema);
 	            rightsRolesRepository = new RightsRolesRepositoryMySQL(connectionWrapper.getConnection());
-
+	            userRepository = new UserRepositoryMySQL(connectionWrapper.getConnection(), rightsRolesRepository);
+	            
 	            bootstrapRoles();
 	            bootstrapRights();
 	            bootstrapRoleRight();
@@ -127,9 +140,21 @@ public class Bootstrap {
 	        }
 	    }
 
-	    private static void bootstrapUserRoles() throws SQLException {
-	    }
 	    
-
+	    
+	    private static void bootstrapUserRoles() throws SQLException {
+	    Map <User, String> user_role = getPredefinedUsers();
+	    Iterator<?> it = user_role.entrySet().iterator();
+	    AuthenticationService authenticationService = new AuthenticationServiceMySQL(userRepository, rightsRolesRepository);
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        String username= ((User) pair.getKey()).getUsername();
+	        String password= ((User) pair.getKey()).getPassword();
+	        String roleName= (String) pair.getValue();
+	        System.out.println("I will register new users");
+	        authenticationService.register(username, password, roleName);
+	        it.remove();
+	    }   
+	    }
 }
 

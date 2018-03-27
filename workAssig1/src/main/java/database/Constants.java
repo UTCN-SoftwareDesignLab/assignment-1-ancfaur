@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.User;
+import model.builders.UserBuilder;
+
 public class Constants {
 	
 	public static class Schemas {
@@ -28,7 +31,7 @@ public class Constants {
         public static final String CLIENT_ACCOUNT = "client_account";
      
 
-        public static final String[] ORDERED_TABLES_FOR_CREATION = new String[]{USER, ROLE, RIGHT, ROLE_RIGHT, USER_ROLE, CLIENT, ACCOUNT, CLIENT_ACCOUNT};
+        public static final String[] ORDERED_TABLES_FOR_CREATION = new String[]{USER, ROLE, RIGHT, ROLE_RIGHT ,USER_ROLE, CLIENT, ACCOUNT, CLIENT_ACCOUNT};
     }
 
     public static class Roles {
@@ -60,6 +63,7 @@ public class Constants {
         public static final String[] RIGHTS = new String[]{CREATE_CLIENT, READ_CLIENT, UPDATE_CLIENT, CREATE_ACCOUNT,READ_ACCOUNT,UPDATE_ACCOUNT,DELETE_ACCOUNT,TRANSFER_BETWEEN_ACCOUNTS,PROCESS_UTILITY_BILL,CREATE_EMPLOYEE,READ_EMPLOYEE, UPDATE_EMPLOYEE, DELETE_EMPLOYEE};
     }
 
+    
     public static Map<String, List<String>> getRolesRights() {
         Map<String, List<String>> ROLES_RIGHTS = new HashMap<>();
         for (String role : ROLES) {
@@ -75,5 +79,30 @@ public class Constants {
         return ROLES_RIGHTS;
     }
 
+    public static Map<User, String> getPredefinedUsers() {
+    	Map<User, String> user_role = new HashMap<>();
+        User employee1 = new UserBuilder()
+        		.setUsername("employee1@yahoo.com")
+        		.setPassword("Employee1#")
+        		.build();
+        User employee2 = new UserBuilder()
+        		.setUsername("employee2@yahoo.com")
+        		.setPassword("Employee2#")
+        		.build();
+        User administrator1 = new UserBuilder()
+        		.setUsername("administrator1@yahoo.com")
+        		.setPassword("Administrator1#")
+        		.build();
+        User administrator2 = new UserBuilder()
+        		.setUsername("administrator2@yahoo.com")
+        		.setPassword("Administrator2#")
+        		.build();
+        
+        user_role.put(employee1, EMPLOYEE);
+        user_role.put(employee2, EMPLOYEE);
+        user_role.put(administrator1, ADMINISTRATOR);
+        user_role.put(administrator2, ADMINISTRATOR);
+        return user_role;
+    }
 
 }
