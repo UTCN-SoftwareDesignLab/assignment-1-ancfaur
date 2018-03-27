@@ -86,11 +86,16 @@ public class AdministatorMainView extends JFrame {
 		Object[] columns = {"Username" , "Role"};
 		tableModel = new DefaultTableModel(columns, 0);
 		
+		table = new JTable(tableModel);
+		table.setBounds(280, 36, 236, 180);
 		    
 		tableScroll = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		tableScroll.setBounds(270, 175, 246, -128);
+		tableScroll.setViewportView(table);
+		tableScroll.setBounds(280, 36, 236, 180);
 		contentPane.add(tableScroll);
+	
 		
+	
 		    
 		textArea = new JTextArea();
 		textArea.setBounds(29, 237, 218, 112);
@@ -118,9 +123,7 @@ public class AdministatorMainView extends JFrame {
 		lblEmployeeDetails.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblEmployeeDetails.setBounds(279, 227, 114, 14);
 		contentPane.add(lblEmployeeDetails);
-		table = new JTable(tableModel);
-		contentPane.add(table);
-		table.setBounds(280, 36, 236, 180);
+		
 	}
 
 	public void setCreateBtnListener(ActionListener createButtonListener) {
@@ -140,9 +143,6 @@ public class AdministatorMainView extends JFrame {
 		generateReportBtn.addActionListener(reportButtonListener);	
 	}
 	
-	public void setJTableListener(ActionListener jTablelListener) {
-		
-	}
 	
 	public DefaultTableModel getTableModel() {
 		return tableModel;

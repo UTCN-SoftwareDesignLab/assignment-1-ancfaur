@@ -20,5 +20,7 @@ public interface AccountRepository {
     List<Account> findAccountsForClient(Long clientId);
 
     void removeAll();
+    
+    boolean update(Account account);
 
 }

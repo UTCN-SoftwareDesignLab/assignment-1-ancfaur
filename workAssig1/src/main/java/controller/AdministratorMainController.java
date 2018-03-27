@@ -77,7 +77,7 @@ public class AdministratorMainController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (selectedUser == null) {
-				administratorView.setTextAreaText("no employee selected");
+				JOptionPane.showMessageDialog(administratorView.getContentPane(),"No user selected");
 			} else {
 				Long userId = selectedUser.getId();
 				Notification<Boolean> updateNotification = authenticationService.updateUserAccount(
@@ -102,7 +102,7 @@ public class AdministratorMainController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (selectedUser == null) {
-				administratorView.setTextAreaText("no employee selected");
+				JOptionPane.showMessageDialog(administratorView.getContentPane(),"No user selected");
 		}else {
 			 userRepository.delete(selectedUser.getId());
 			 updateEmployeesList();
@@ -115,7 +115,7 @@ public class AdministratorMainController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (selectedUser == null)
-				administratorView.setTextAreaText("no employee selected");
+				JOptionPane.showMessageDialog(administratorView.getContentPane(),"No user selected");
 
 		}
 	}
@@ -127,9 +127,9 @@ public class AdministratorMainController {
 			int row = administratorView.getTable().rowAtPoint(evt.getPoint());
 			if (row >= 0) {
 				selectedUser = employees.get(row);
-				System.out.println("selected user:" + selectedUser.getId() + " " + selectedUser.getUsername()
-						+ selectedUser.showListRoles());
-				administratorView.setTextAreaText("");
+				System.out.println("selected user:" + selectedUser.getId() + " " + selectedUser.getUsername()+ selectedUser.showListRoles());
+				administratorView.setUsernameTextField(selectedUser.getUsername());
+				administratorView.setPasswordTextField("********");
 			}
 		}
 

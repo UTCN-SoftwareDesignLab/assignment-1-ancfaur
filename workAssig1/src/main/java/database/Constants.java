@@ -41,6 +41,7 @@ public class Constants {
         public static final String[] ROLES = new String[]{ADMINISTRATOR, EMPLOYEE};
     }
 
+    
     public static class Rights {
     	public static final String CREATE_CLIENT= "create_client";
     	public static final String READ_CLIENT = "read_client";
@@ -103,6 +104,13 @@ public class Constants {
         user_role.put(administrator1, ADMINISTRATOR);
         user_role.put(administrator2, ADMINISTRATOR);
         return user_role;
+    }
+    
+    public static class AccountTypes {
+        public static final String SAVING = "saving";
+        public static final String SPENDING = "spending";
+
+        public static final String[] ACCOUNT_TYPES = new String[]{SAVING, SPENDING};
     }
 
 }

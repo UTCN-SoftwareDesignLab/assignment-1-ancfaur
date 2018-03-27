@@ -10,17 +10,17 @@ import java.util.regex.Pattern;
 /**
  * Created by Alex on 18/03/2017.
  */
-public class UserValidator {
+public class UserValidator implements Validator{
     private static final String EMAIL_VALIDATION_REGEX = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     private static final int MIN_PASSWORD_LENGTH = 8;
-
+    private final List<String> errors;
+    private final User user;
+    
     public List<String> getErrors() {
         return errors;
     }
 
-    private final List<String> errors;
-
-    private final User user;
+  
 
     public UserValidator(User user) {
         this.user = user;

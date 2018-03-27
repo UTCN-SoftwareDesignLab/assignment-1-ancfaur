@@ -13,4 +13,6 @@ public interface ClientRepository {
     boolean save(Client client);
 
     void removeAll();
+    
+    boolean update(Client client);
 }

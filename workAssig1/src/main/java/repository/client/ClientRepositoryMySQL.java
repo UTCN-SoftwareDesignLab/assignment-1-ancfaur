@@ -1,12 +1,15 @@
 package repository.client;
 import model.Account;
 import model.Client;
+import model.User;
 import model.builders.ClientBuilder;
 import repository.account.AccountRepository;
 import repository.account.AccountRepositoryMySQL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import static database.Constants.Tables.CLIENT;
 
 
@@ -48,6 +51,7 @@ public class ClientRepositoryMySQL implements ClientRepository {
             clientResultSet.next();
             Long clientId = clientResultSet.getLong("id");
             List<Account> accounts = accountRepository.findAccountsForClient(clientId);
+          
             Client client = new ClientBuilder()
             		.setId(clientId)
             		.setCnp(clientResultSet.getString("cnp"))
@@ -67,13 +71,13 @@ public class ClientRepositoryMySQL implements ClientRepository {
 
     @Override
     public boolean save(Client client) {
-        try {
+    	try {
             PreparedStatement insertClientStatement = connection
-                    .prepareStatement("INSERT INTO client values (null, ?, ?, ?, ?)");
+                    .prepareStatement("INSERT INTO client values (null, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             insertClientStatement.setString(1, client.getCnp());
             insertClientStatement.setString(2, client.getName());
             insertClientStatement.setString(3, client.getAddress());
-            insertClientStatement.setLong(4, client.getIdCard());
+            insertClientStatement.setLong(4, new Long(new Random().nextInt(500)));
             insertClientStatement.executeUpdate();
 
             ResultSet rs = insertClientStatement.getGeneratedKeys();
@@ -108,5 +112,21 @@ public class ClientRepositoryMySQL implements ClientRepository {
                 .setIdCard(rs.getLong("idCard"))
                 .build();
     }
+    
+    public boolean update(Client client) {
+		try {
+			PreparedStatement updateUserStatement = connection
+					.prepareStatement("UPDATE client  SET cnp=?, name=?, address=? WHERE id=?;");
+			updateUserStatement.setString(1, client.getCnp());
+			updateUserStatement.setString(2, client.getName());
+			updateUserStatement.setString(3, client.getAddress());
+			updateUserStatement.setLong(4, client.getId());
+			updateUserStatement.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 }
