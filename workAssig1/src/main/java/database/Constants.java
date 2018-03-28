@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.Bill;
 import model.User;
+import model.builders.BillBuilder;
 import model.builders.UserBuilder;
 
 public class Constants {
@@ -29,9 +31,10 @@ public class Constants {
         public static final String ROLE_RIGHT = "role_right";
         public static final String USER_ROLE = "user_role";
         public static final String CLIENT_ACCOUNT = "client_account";
+        public static final String BILL = "bill";
      
 
-        public static final String[] ORDERED_TABLES_FOR_CREATION = new String[]{USER, ROLE, RIGHT, ROLE_RIGHT ,USER_ROLE, CLIENT, ACCOUNT, CLIENT_ACCOUNT};
+        public static final String[] ORDERED_TABLES_FOR_CREATION = new String[]{USER, ROLE, RIGHT, ROLE_RIGHT ,USER_ROLE, CLIENT, ACCOUNT, CLIENT_ACCOUNT, BILL};
     }
 
     public static class Roles {
@@ -106,11 +109,35 @@ public class Constants {
         return user_role;
     }
     
-    public static class AccountTypes {
-        public static final String SAVING = "saving";
-        public static final String SPENDING = "spending";
-
-        public static final String[] ACCOUNT_TYPES = new String[]{SAVING, SPENDING};
+    public static List<Bill> getPredefinedBills(){
+    	List<Bill> bills = new ArrayList<>();
+    	Bill bill1 = new BillBuilder()
+    			.setBillAmount(100)
+    			.setBillUtility("gas")
+    			.setPaidStatus(false)
+    			.build();
+    	
+    	Bill bill2 = new BillBuilder()
+    			.setBillAmount(200)
+    			.setBillUtility("electricity")
+    			.setPaidStatus(false)
+    			.build();
+    	
+    	Bill bill3 = new BillBuilder()
+    			.setBillAmount(300)
+    			.setBillUtility("water")
+    			.setPaidStatus(false)
+    			.build();
+    	
+    	Bill bill4 = new BillBuilder()
+    			.setBillAmount(10)
+    			.setBillUtility("garbage collector")
+    			.setPaidStatus(false)
+    			.build();	
+    	bills.add(bill1);
+    	bills.add(bill2);
+    	bills.add(bill3);
+    	bills.add(bill4);
+    	return bills;
     }
-
 }

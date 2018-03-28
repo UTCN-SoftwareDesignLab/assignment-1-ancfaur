@@ -1,7 +1,9 @@
 package repository.account;
 
 import model.Account;
+import model.Bill;
 import model.Client;
+import model.Transfer;
 import repository.EntityNotFoundException;
 
 import java.util.List;
@@ -22,5 +24,10 @@ public interface AccountRepository {
     void removeAll();
     
     boolean update(Account account);
+
+	boolean delete(Long clientId, Long accountId);
+	
+	public boolean transfer(Transfer transfer);
+
 
 }

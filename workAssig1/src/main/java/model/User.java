@@ -40,6 +40,7 @@ public class User {
         this.roles = roles;
     }
     
+    
     public String showListRoles() {
     	if (roles==null) return "no roles added!!";
     	if (roles.size()==0) return "user with empty roles set!";

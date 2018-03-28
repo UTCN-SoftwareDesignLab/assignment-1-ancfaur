@@ -106,11 +106,18 @@ public class AdministratorMainController {
 		}else {
 			 userRepository.delete(selectedUser.getId());
 			 updateEmployeesList();
+			 refreshSelectedUser();
 			
 		}
 		}
 	}
 
+	private void refreshSelectedUser() {
+		selectedUser =null;
+		administratorView.setUsernameTextField("");
+		administratorView.setPasswordTextField("");
+	}
+	
 	private class ReportButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {

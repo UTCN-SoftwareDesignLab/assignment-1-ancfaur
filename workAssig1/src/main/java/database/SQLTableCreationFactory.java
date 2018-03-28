@@ -80,16 +80,6 @@ public class SQLTableCreationFactory {
                         "    REFERENCES role (id)" +
                         "    ON DELETE CASCADE" +
                         "    ON UPDATE CASCADE);";
-            case CLIENT:
-            	return "CREATE TABLE IF NOT EXISTS client (" +
-                "  id INT NOT NULL AUTO_INCREMENT," +
-                "  cnp VARCHAR(13) NOT NULL," +
-                "  name VARCHAR(100) NOT NULL," +
-                "  address VARCHAR(200) NOT NULL," +
-                "  idCard INT NULL,"+
-                "  PRIMARY KEY (id)," +
-                "  UNIQUE INDEX id_UNIQUE (id ASC)," +
-                "  UNIQUE INDEX cnp_UNIQUE (name ASC));";
             	
             case CLIENT_ACCOUNT:
                 return "  CREATE TABLE IF NOT EXISTS client_account (" +
@@ -110,6 +100,26 @@ public class SQLTableCreationFactory {
                         "    REFERENCES `account` (id)" +
                         "    ON DELETE CASCADE" +
                         "    ON UPDATE CASCADE);";
+                
+            case BILL:
+            	return "CREATE TABLE IF NOT EXISTS bill (" +
+                "  id INT NOT NULL AUTO_INCREMENT," +
+                "  amount  float NOT NULL," +
+                "  utility VARCHAR(100) NOT NULL," +
+                "  paid VARCHAR(200) NOT NULL,"+
+                "  PRIMARY KEY (id)," +
+                "  UNIQUE INDEX id_UNIQUE (id ASC));";
+
+            case CLIENT:
+            	return "CREATE TABLE IF NOT EXISTS client (" +
+                "  id INT NOT NULL AUTO_INCREMENT," +
+                "  cnp VARCHAR(13) NOT NULL," +
+                "  name VARCHAR(100) NOT NULL," +
+                "  address VARCHAR(200) NOT NULL," +
+                "  idCard INT NULL,"+
+                "  PRIMARY KEY (id)," +
+                "  UNIQUE INDEX id_UNIQUE (id ASC)," +
+                "  UNIQUE INDEX cnp_UNIQUE (name ASC));";
             default:
                 return "";
 

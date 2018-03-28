@@ -110,7 +110,7 @@ public class UserRepositoryMySQL implements UserRepository {
 		}
 	}
 
-	public boolean delete(Long userId) {
+	private boolean deleteUser(Long userId) {
 		try {
 			PreparedStatement deleteUserStatement = connection.prepareStatement("DELETE FROM user WHERE id = ?");
 			deleteUserStatement.setLong(1, userId);
@@ -121,7 +121,24 @@ public class UserRepositoryMySQL implements UserRepository {
 			return false;
 		}
 	}
+	
+	private boolean deleteUserRoleRelation(Long userId) {
+		try {
+			PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM user_role WHERE id = ?");
+			deleteStatement.setLong(1, userId);
+			deleteStatement.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
 
+	public boolean delete(Long userId) {
+		return deleteUserRoleRelation(userId)&& deleteUser(userId);
+	}
+	
 	@Override
 	public void removeAll() {
 		try {

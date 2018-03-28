@@ -2,6 +2,7 @@ package repository.account;
 
 import model.Account;
 import model.Role;
+import model.Transfer;
 import model.builders.AccountBuilder;
 import repository.EntityNotFoundException;
 
@@ -137,5 +138,51 @@ public class AccountRepositoryMySQL implements AccountRepository {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	private boolean deleteAccount(Long accountId) {
+		try {
+			PreparedStatement updateUserStatement = connection
+					.prepareStatement("DELETE from account WHERE id=?;");
+			updateUserStatement.setLong(1, accountId);
+			updateUserStatement.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	private boolean deleteAccountClientRelation(Long clientId, Long accountId) {
+		try {
+			PreparedStatement updateUserStatement = connection
+					.prepareStatement("DELETE FROM client_account WHERE client_id = ? and account_id= ?");
+			updateUserStatement.setLong(1, clientId);
+			updateUserStatement.setLong(2, accountId);
+			updateUserStatement.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	
+	@Override
+	public boolean delete(Long clientId, Long accountId) {
+	return deleteAccountClientRelation(clientId, accountId) && deleteAccount(accountId);
+	}
+
+	@Override
+	public boolean transfer(Transfer transfer)  {
+		Account source = transfer.getSource();
+		Account dest = transfer.getDestination();
+		
+		source.setBalance(source.getBalance() -transfer.getAmount());
+		dest.setBalance(dest.getBalance()+ transfer.getAmount());
+		update(source);
+		update(dest);
+		return true;
+		
 	}
 }

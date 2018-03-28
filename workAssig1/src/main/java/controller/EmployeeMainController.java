@@ -6,21 +6,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import model.Account;
 import model.Client;
+import model.Transfer;
 import model.User;
 import model.builders.AccountBuilder;
 import model.validation.Notification;
 import repository.account.AccountRepository;
+import repository.bill.BillRepository;
 import repository.client.ClientRepository;
 import repository.user.UserRepository;
 import service.account.AccountService;
 import service.client.ClientService;
+import view.AdministatorMainView;
+import view.BillView;
 import view.EmployeeMainView;
+import view.TransferView;
 
 public class EmployeeMainController {
 	private final EmployeeMainView employeeView;
@@ -30,12 +36,14 @@ public class EmployeeMainController {
 	private List<Account> accounts;
 	private Account selectedAccount;
 	private Client selectedClient;
+	private BillRepository billRepository;
 
 	public EmployeeMainController(EmployeeMainView employeeView, ClientService clientService,
-			AccountService accountService) {
+			AccountService accountService, BillRepository billRepository) {
 		this.employeeView = employeeView;
 		this.clientService = clientService;
 		this.accountService = accountService;
+		this.billRepository = billRepository;
 
 		clients = clientService.findAll();
 
@@ -61,12 +69,12 @@ public class EmployeeMainController {
 					new Object[] { client.getName(), client.getCnp(), client.getAddress(), client.getIdCard() });
 
 	}
-	
+
 	private void fillAccountTableWithData() {
 		employeeView.getAccountsTableModel().setRowCount(0);
-		for (Account account:accounts)
-			employeeView.getAccountsTableModel().addRow(
-					new Object[] {account.getBalance(), account.getCreationDate(), account.getType()});
+		for (Account account : accounts)
+			employeeView.getAccountsTableModel().addRow(new Object[] { account.getId(), account.getBalance(),
+					account.getCreationDate(), account.getType() });
 
 	}
 
@@ -76,13 +84,20 @@ public class EmployeeMainController {
 	}
 
 	private void updateAccountsList() {
-	   this.accounts= accountService.findAccountsForClient(selectedClient.getId());
-	   if (accounts==null) System.out.println("no goood brooo");
-	   if (accounts.size()==0) System.out.println("no accounts to show");
-	   fillAccountTableWithData();
-		
+		this.accounts = accountService.findAccountsForClient(selectedClient.getId());
+		if (accounts == null)
+			System.out.println("no goood brooo");
+		if (accounts.size() == 0)
+			System.out.println("no accounts to show");
+		fillAccountTableWithData();
+
 	}
-	
+
+	private void refreshSelectedAccount() {
+		selectedAccount = null;
+		employeeView.setBalanceTextField("");
+	}
+
 	private class CreateClientButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
@@ -136,51 +151,68 @@ public class EmployeeMainController {
 		public void actionPerformed(ActionEvent e) {
 			if (selectedClient == null) {
 				JOptionPane.showMessageDialog(employeeView.getContentPane(), "No client selected");
+				return;
+			}
+			if (employeeView.getBalanceTextField().equals("")) {
+				JOptionPane.showMessageDialog(employeeView.getContentPane(), "Firstly introduce the amount");
+				return;
+			}
+			Notification<Boolean> notification = accountService.registerAccountToClient(
+					Float.parseFloat(employeeView.getBalanceTextField()), employeeView.getTypeCombo(),
+					selectedClient.getId());
+			if (notification.hasErrors()) {
+				JOptionPane.showMessageDialog(employeeView.getContentPane(), notification.getFormattedErrors());
 			} else {
-				Notification<Boolean> notification = accountService.registerAccountToClient(Float.parseFloat(employeeView.getBalanceTextField()),employeeView.getTypeCombo(),  selectedClient.getId());
-				if (notification.hasErrors()) {
+				if (!notification.getResult()) {
 					JOptionPane.showMessageDialog(employeeView.getContentPane(),
-							notification.getFormattedErrors());
+							"Account not created, please try again later.");
 				} else {
-					if (!notification.getResult()) {
-						JOptionPane.showMessageDialog(employeeView.getContentPane(),
-								"Account not created, please try again later.");
-					} else {
-						JOptionPane.showMessageDialog(employeeView.getContentPane(), "Account created");
-						updateAccountsList();
-					}
+					JOptionPane.showMessageDialog(employeeView.getContentPane(), "Account created");
+					updateAccountsList();
 				}
 			}
+
 		}
 	}
 
 	private class UpdateAccountButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (selectedClient==null || selectedAccount==null) {
-				JOptionPane.showMessageDialog(employeeView.getContentPane(),
-						"Please select client, then account");
+			if (selectedClient == null || selectedAccount == null) {
+				JOptionPane.showMessageDialog(employeeView.getContentPane(), "Please select client, then account");
+				return;
+			}
+			if (employeeView.getBalanceTextField().equals("")) {
+				JOptionPane.showMessageDialog(employeeView.getContentPane(), "Firstly introduce the amount");
+				return;
+			}
+			Notification<Boolean> notification = accountService.updateAccount(selectedAccount.getId(),
+					Float.parseFloat(employeeView.getBalanceTextField()), employeeView.getTypeCombo());
+			if (notification.hasErrors()) {
+				JOptionPane.showMessageDialog(employeeView.getContentPane(), notification.getFormattedErrors());
 			} else {
-				Notification<Boolean> notification = accountService.updateAccount(selectedAccount.getId(), Float.parseFloat(employeeView.getBalanceTextField()), employeeView.getTypeCombo());
-				if (notification.hasErrors()) {
+				if (!notification.getResult()) {
 					JOptionPane.showMessageDialog(employeeView.getContentPane(),
-							notification.getFormattedErrors());
+							"Account not updated, please try again later.");
 				} else {
-					if (!notification.getResult()) {
-						JOptionPane.showMessageDialog(employeeView.getContentPane(),
-								"Account not updated, please try again later.");
-					} else {
-						JOptionPane.showMessageDialog(employeeView.getContentPane(), "Account updated");
-						updateAccountsList();
-					}
+					JOptionPane.showMessageDialog(employeeView.getContentPane(), "Account updated");
+					updateAccountsList();
 				}
 			}
 		}
+
 	}
 
 	private class DeleteAccountButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if (selectedClient == null || selectedAccount == null) {
+				JOptionPane.showMessageDialog(employeeView.getContentPane(), "Please select client, then account");
+			} else {
+				accountService.delete(selectedClient.getId(), selectedAccount.getId());
+				refreshSelectedAccount();
+				updateAccountsList();
+			}
 
 		}
 	}
@@ -188,14 +220,22 @@ public class EmployeeMainController {
 	private class ProcessBillButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			if (selectedAccount == null) {
+				JOptionPane.showMessageDialog(employeeView.getContentPane(), "Please select  account");
+			} else {
+				BillController billController = new BillController(new BillView(), billRepository, selectedAccount, accountService);
+			}
 		}
+
 	}
 
 	private class TransferButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			TransferController transferController = new TransferController(new TransferView(), accountService);
+			if (selectedAccount != null)
+				transferController.suggestSourceAccount(selectedAccount.getId());
+			accounts = new ArrayList<Account>();
 		}
 	}
 
@@ -210,6 +250,7 @@ public class EmployeeMainController {
 				employeeView.setCnpTextField(selectedClient.getCnp());
 				employeeView.setNameTextField(selectedClient.getName());
 				employeeView.setAddressTextField(selectedClient.getAddress());
+				refreshSelectedAccount();
 				updateAccountsList();
 			}
 		}

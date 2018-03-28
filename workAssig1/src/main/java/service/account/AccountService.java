@@ -1,6 +1,7 @@
 package service.account;
 
 import model.Account;
+import model.Bill;
 import model.validation.Notification;
 import repository.EntityNotFoundException;
 
@@ -17,5 +18,11 @@ public interface AccountService {
     Notification<Boolean> registerAccountToClient(float balance, String type,  Long clientId);
     
     Notification<Boolean>  updateAccount(Long accountId, float balance, String type);
+    
+    boolean delete(Long clientId, Long accountId);
+    
+    public Notification<Boolean> transfer(Long sourceId, Long destinationId, float amount);
+    
+    public Notification<Boolean> processBill(Bill bill, Account account);
 
 }

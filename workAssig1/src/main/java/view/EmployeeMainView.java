@@ -106,7 +106,7 @@ public class EmployeeMainView extends JFrame {
 		contentPane.add(clientsTableScroll);
 		
 		
-		Object[] accountColumns = {"Balance", "Date", "Type"};
+		Object[] accountColumns = {"Id","Balance", "Date", "Type"};
 		accountsTableModel = new DefaultTableModel(accountColumns, 0);
 		
 		accountsTable = new JTable(accountsTableModel);

@@ -1,6 +1,9 @@
+package factory;
 import database.DBConnectionFactory;
 import repository.account.AccountRepository;
 import repository.account.AccountRepositoryMySQL;
+import repository.bill.BillRepository;
+import repository.bill.BillRepositoryMySQL;
 import repository.client.ClientRepository;
 import repository.client.ClientRepositoryMySQL;
 import repository.security.RightsRolesRepository;
@@ -28,6 +31,7 @@ public class ComponentFactory {
     private final ClientRepository clientRepository;
     private final AccountRepository accountRepository;
     private final AccountService accountService;
+    private final BillRepository billRepository;
     
 
     private static ComponentFactory instance;
@@ -51,12 +55,8 @@ public class ComponentFactory {
         this.clientService = new ClientServiceMySQL(this.clientRepository);
         this.accountRepository = new AccountRepositoryMySQL(connection);
         this.accountService = new AccountServiceMySQL(this.accountRepository);
-        
+        this.billRepository = new BillRepositoryMySQL(connection);
     }
-
-    public AccountRepository getAccountRepository() {
-		return accountRepository;
-	}
 
 	public AccountService getAccountService() {
 		return accountService;
@@ -70,18 +70,14 @@ public class ComponentFactory {
         return userRepository;
     }
 
-    public RightsRolesRepository getRightsRolesRepository() {
-        return rightsRolesRepository;
-    }
 
 	public ClientService getClientService() {
 		return clientService;
 	}
 
-	public ClientRepository getClientRepository() {
-		return clientRepository;
+	public BillRepository getBillRepository() {
+		return billRepository;
 	}
-
-    
+	    
    
 }
