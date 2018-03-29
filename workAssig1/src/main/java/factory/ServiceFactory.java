@@ -6,6 +6,8 @@ import repository.bill.BillRepository;
 import repository.bill.BillRepositoryMySQL;
 import repository.client.ClientRepository;
 import repository.client.ClientRepositoryMySQL;
+import repository.report.ReportRepository;
+import repository.report.ReportRepositoryMySQL;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 import repository.user.UserRepository;
@@ -19,10 +21,7 @@ import service.user.AuthenticationServiceMySQL;
 
 import java.sql.Connection;
 
-/**
- * Created by Alex on 18/03/2017.
- */
-public class ComponentFactory {
+public class ServiceFactory {
 
     private final AuthenticationService authenticationService;
     private final UserRepository userRepository;
@@ -32,30 +31,30 @@ public class ComponentFactory {
     private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final BillRepository billRepository;
+    private final ReportRepository reportRepository;
     
 
-    private static ComponentFactory instance;
+    private static ServiceFactory instance;
 
-    public static ComponentFactory instance(Boolean componentsForTests) {
+    public static ServiceFactory instance(Boolean componentsForTests) {
         if (instance == null) {
-            instance = new ComponentFactory(componentsForTests);
+            instance = new ServiceFactory(componentsForTests);
         }
         return instance;
     }
 
-    /**
-     * @param componentsForTests
-     */
-    private ComponentFactory(Boolean componentsForTests) {
+    
+    private ServiceFactory(Boolean componentsForTests) {
         Connection connection = new DBConnectionFactory().getConnectionWrapper(componentsForTests).getConnection();
         this.rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
         this.userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
         this.authenticationService = new AuthenticationServiceMySQL(this.userRepository, this.rightsRolesRepository);
-        this.clientRepository = new ClientRepositoryMySQL(connection);
-        this.clientService = new ClientServiceMySQL(this.clientRepository);
         this.accountRepository = new AccountRepositoryMySQL(connection);
         this.accountService = new AccountServiceMySQL(this.accountRepository);
+        this.clientRepository = new ClientRepositoryMySQL(connection, accountRepository);
+        this.clientService = new ClientServiceMySQL(this.clientRepository);
         this.billRepository = new BillRepositoryMySQL(connection);
+        this.reportRepository = new ReportRepositoryMySQL(connection);
     }
 
 	public AccountService getAccountService() {
@@ -77,6 +76,10 @@ public class ComponentFactory {
 
 	public BillRepository getBillRepository() {
 		return billRepository;
+	}
+	
+	public ReportRepository getReportRepository() {
+		return reportRepository;
 	}
 	    
    

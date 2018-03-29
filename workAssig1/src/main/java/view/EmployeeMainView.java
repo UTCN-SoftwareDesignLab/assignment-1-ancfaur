@@ -28,6 +28,7 @@ public class EmployeeMainView extends JFrame {
 	private JTextField cnpTextField;
 	private JTextField nameTextField;
 	private JTextField addressTextField;
+	private JTextField dateTextField;
 	
 	private JTable clientsTable;
 	private JTable accountsTable;
@@ -46,6 +47,7 @@ public class EmployeeMainView extends JFrame {
 	private JButton transferBtn;
 	
 	private JComboBox<String> typeCombo;
+	private JLabel lblCurrentDate;
 	
 	/**
 	 * Create the frame.
@@ -179,8 +181,17 @@ public class EmployeeMainView extends JFrame {
 		typeCombo.addItem(new String("spending"));
 		typeCombo.setBounds(429, 71, 135, 20);
 		contentPane.add(typeCombo);
+		
+		dateTextField = new JTextField();
+		dateTextField.setBounds(72, 0, 86, 20);
+		contentPane.add(dateTextField);
+		dateTextField.setColumns(10);
+		
+		lblCurrentDate = new JLabel("Date");
+		lblCurrentDate.setBounds(30, 3, 30, 14);
+		contentPane.add(lblCurrentDate);
 
-		setVisible(true);
+		setVisible(false);
 	}
 
 	public void setCreateClientBtnListener(ActionListener listener) {
@@ -281,6 +292,10 @@ public class EmployeeMainView extends JFrame {
 
 	public void setBalanceTextField(String balance) {
 		balanceTextField.setText(balance);
+	}
+
+	public String getDateTextField() {
+		return dateTextField.getText();
 	}
 	
 }

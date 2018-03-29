@@ -1,25 +1,33 @@
 package controller;
 
 import static database.Constants.Roles.EMPLOYEE;
+import static database.Constants.EMPLOYEE_OPERATION_TYPES.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import model.Account;
 import model.Client;
+import model.Report;
 import model.Transfer;
 import model.User;
 import model.builders.AccountBuilder;
+import model.builders.ReportBuilder;
 import model.validation.Notification;
 import repository.account.AccountRepository;
 import repository.bill.BillRepository;
 import repository.client.ClientRepository;
+import repository.report.ReportRepository;
 import repository.user.UserRepository;
 import service.account.AccountService;
 import service.client.ClientService;
@@ -36,14 +44,22 @@ public class EmployeeMainController {
 	private List<Account> accounts;
 	private Account selectedAccount;
 	private Client selectedClient;
-	private BillRepository billRepository;
+	private User user;
+	private ReportRepository reportRepository;
+
+	private BillController billController;
+	private TransferController transferController;
 
 	public EmployeeMainController(EmployeeMainView employeeView, ClientService clientService,
-			AccountService accountService, BillRepository billRepository) {
+			AccountService accountService, ReportRepository reportRepository,
+			BillController billController, TransferController transferController) {
 		this.employeeView = employeeView;
 		this.clientService = clientService;
 		this.accountService = accountService;
-		this.billRepository = billRepository;
+		this.reportRepository = reportRepository;
+		
+		this.billController = billController;
+		this.transferController = transferController;
 
 		clients = clientService.findAll();
 
@@ -60,6 +76,11 @@ public class EmployeeMainController {
 		employeeView.setAccountsTableListener(new AccountsTableListener());
 
 		fillClientTableWithData();
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+		System.out.println("am setat user pe"+user.getUsername()+ "cu id "+ user.getId());
 	}
 
 	private void fillClientTableWithData() {
@@ -98,6 +119,29 @@ public class EmployeeMainController {
 		employeeView.setBalanceTextField("");
 	}
 
+	private Date extractDateFromString(String dateString) {
+		DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+		Date date;
+		try {
+			date = df.parse(dateString);
+			return date;
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private Report composeReport(String operationType) {
+		Report report = new ReportBuilder().setUserId(user.getId())
+				.setDate(extractDateFromString(employeeView.getDateTextField()))
+				.setClientId(selectedClient.getId())
+				.setOperationType(operationType).build();
+		
+		System.out.println(report.toString());
+		return report;
+	}
+
 	private class CreateClientButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
@@ -114,6 +158,9 @@ public class EmployeeMainController {
 							"Registration not successful, please try again later.");
 				} else {
 					JOptionPane.showMessageDialog(employeeView.getContentPane(), "New client registered");
+					selectedClient = clientService.findByCnp(cnp);
+					Report report = composeReport(CREATE_CLIENT);
+					reportRepository.save(report);
 					updateClientsList();
 				}
 			}
@@ -139,6 +186,8 @@ public class EmployeeMainController {
 								"Update not successful, please try again later.");
 					} else {
 						JOptionPane.showMessageDialog(employeeView.getContentPane(), "Client updated");
+						Report report = composeReport(UPDATE_CLIENT);
+						reportRepository.save(report);
 						updateClientsList();
 					}
 				}
@@ -168,6 +217,8 @@ public class EmployeeMainController {
 							"Account not created, please try again later.");
 				} else {
 					JOptionPane.showMessageDialog(employeeView.getContentPane(), "Account created");
+					Report report = composeReport(CREATE_ACCOUNT);
+					reportRepository.save(report);
 					updateAccountsList();
 				}
 			}
@@ -196,6 +247,8 @@ public class EmployeeMainController {
 							"Account not updated, please try again later.");
 				} else {
 					JOptionPane.showMessageDialog(employeeView.getContentPane(), "Account updated");
+					Report report = composeReport(UPDATE_ACCOUNT);
+					reportRepository.save(report);
 					updateAccountsList();
 				}
 			}
@@ -212,6 +265,8 @@ public class EmployeeMainController {
 				accountService.delete(selectedClient.getId(), selectedAccount.getId());
 				refreshSelectedAccount();
 				updateAccountsList();
+				Report report = composeReport(DELETE_ACCOUNT);
+				reportRepository.save(report);
 			}
 
 		}
@@ -223,7 +278,13 @@ public class EmployeeMainController {
 			if (selectedAccount == null) {
 				JOptionPane.showMessageDialog(employeeView.getContentPane(), "Please select  account");
 			} else {
-				BillController billController = new BillController(new BillView(), billRepository, selectedAccount, accountService);
+				billController.cleanView();
+				billController.setAccountId(selectedAccount.getId());
+				billController.setClientId(selectedClient.getId());
+				billController.setDate(extractDateFromString(employeeView.getDateTextField()));
+				billController.setUserId(user.getId());
+				billController.setVisible(true);
+
 			}
 		}
 
@@ -232,10 +293,17 @@ public class EmployeeMainController {
 	private class TransferButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			TransferController transferController = new TransferController(new TransferView(), accountService);
-			if (selectedAccount != null)
-				transferController.suggestSourceAccount(selectedAccount.getId());
-			accounts = new ArrayList<Account>();
+			if (selectedClient == null || selectedAccount == null) {
+				JOptionPane.showMessageDialog(employeeView.getContentPane(), "Please select client then account");
+				return;
+			}
+			transferController.cleanView();
+			transferController.setAccountId(selectedAccount.getId());
+			transferController.setClientId(selectedClient.getId());
+			transferController.setDate(extractDateFromString(employeeView.getDateTextField()));
+			transferController.setUserId(user.getId());
+			transferController.setVisible(true);
+
 		}
 	}
 
@@ -299,6 +367,11 @@ public class EmployeeMainController {
 		@Override
 		public void mouseExited(MouseEvent e) {
 		}
+	}
+
+	public void seVisible(boolean b) {
+		employeeView.setVisible(true);
+		
 	}
 
 }

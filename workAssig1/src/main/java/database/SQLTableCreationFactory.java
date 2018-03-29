@@ -100,16 +100,6 @@ public class SQLTableCreationFactory {
                         "    REFERENCES `account` (id)" +
                         "    ON DELETE CASCADE" +
                         "    ON UPDATE CASCADE);";
-                
-            case BILL:
-            	return "CREATE TABLE IF NOT EXISTS bill (" +
-                "  id INT NOT NULL AUTO_INCREMENT," +
-                "  amount  float NOT NULL," +
-                "  utility VARCHAR(100) NOT NULL," +
-                "  paid VARCHAR(200) NOT NULL,"+
-                "  PRIMARY KEY (id)," +
-                "  UNIQUE INDEX id_UNIQUE (id ASC));";
-
             case CLIENT:
             	return "CREATE TABLE IF NOT EXISTS client (" +
                 "  id INT NOT NULL AUTO_INCREMENT," +
@@ -120,6 +110,39 @@ public class SQLTableCreationFactory {
                 "  PRIMARY KEY (id)," +
                 "  UNIQUE INDEX id_UNIQUE (id ASC)," +
                 "  UNIQUE INDEX cnp_UNIQUE (name ASC));";
+            	
+            case BILL:
+            	return "CREATE TABLE IF NOT EXISTS bill (" +
+                "  id INT NOT NULL AUTO_INCREMENT," +
+                "  amount  float NOT NULL," +
+                "  utility VARCHAR(100) NOT NULL," +
+                "  paid VARCHAR(200) NOT NULL,"+
+                "  PRIMARY KEY (id)," +
+                "  UNIQUE INDEX id_UNIQUE (id ASC));";
+
+            
+            	
+            case REPORT:
+                return "  CREATE TABLE IF NOT EXISTS report (" +
+                        "  id INT NOT NULL AUTO_INCREMENT," +
+                        "  user_id INT NOT NULL," +
+                        "  date datetime DEFAULT NULL," +
+                        "  client_id INT NOT NULL," +
+                        "  operation_type VARCHAR(100) NOT NULL," +
+                        "  PRIMARY KEY (id)," +
+                        "  UNIQUE INDEX id_UNIQUE (id ASC)," +
+                        "  INDEX user_id_idx (user_id ASC)," +
+                        "  INDEX client_id_idx (client_id ASC)," +
+                        "  CONSTRAINT user_id_constraint" +
+                        "    FOREIGN KEY (user_id)" +
+                        "    REFERENCES user (id)" +
+                        "    ON DELETE CASCADE" +
+                        "    ON UPDATE CASCADE," +
+                        "  CONSTRAINT client_id_constraint" +
+                        "    FOREIGN KEY (client_id)" +
+                        "    REFERENCES `client` (id)" +
+                        "    ON DELETE CASCADE" +
+                        "    ON UPDATE CASCADE);";
             default:
                 return "";
 

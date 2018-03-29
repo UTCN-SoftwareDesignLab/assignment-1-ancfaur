@@ -36,23 +36,14 @@ public class AdministatorMainView extends JFrame {
 	private JTextField usernameTextField;
 	private JTextField passwordTextField;
 	private JLabel lblEmployeeDetails;
+	private JTextField startDateTextField;
+	private JTextField endDateTextField;
 	
 	
 	
-	/**
-	 * Create the application.
-	 */
 	public AdministatorMainView() {
-		initialize();
-		setVisible(true);
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
 		setTitle("Administrator");
-		setBounds(100, 100, 571, 399);
+		setBounds(100, 100, 571, 426);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
@@ -98,7 +89,7 @@ public class AdministatorMainView extends JFrame {
 	
 		    
 		textArea = new JTextArea();
-		textArea.setBounds(29, 237, 218, 112);
+		textArea.setBounds(29, 289, 218, 76);
 		contentPane.add(textArea);
 		
 		usernameTextField = new JTextField();
@@ -123,6 +114,26 @@ public class AdministatorMainView extends JFrame {
 		lblEmployeeDetails.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblEmployeeDetails.setBounds(279, 227, 114, 14);
 		contentPane.add(lblEmployeeDetails);
+		
+		startDateTextField = new JTextField();
+		startDateTextField.setColumns(10);
+		startDateTextField.setBounds(145, 227, 102, 20);
+		contentPane.add(startDateTextField);
+		
+		endDateTextField = new JTextField();
+		endDateTextField.setColumns(10);
+		endDateTextField.setBounds(145, 249, 102, 20);
+		contentPane.add(endDateTextField);
+		
+		JLabel lblStartDate = new JLabel("Start Date");
+		lblStartDate.setBounds(51, 230, 72, 14);
+		contentPane.add(lblStartDate);
+		
+		JLabel lblEndDate = new JLabel("End Date");
+		lblEndDate.setBounds(51, 252, 72, 14);
+		contentPane.add(lblEndDate);
+		
+		setVisible(false);
 		
 	}
 
@@ -176,5 +187,12 @@ public class AdministatorMainView extends JFrame {
 	public void setTextAreaText(String text) {
 		textArea.setText(text);
 	}
-	
+
+	public String getStartDateTextField() {
+		return startDateTextField.getText();
+	}
+
+	public String getEndDateTextField() {
+		return endDateTextField.getText();
+	}
 }

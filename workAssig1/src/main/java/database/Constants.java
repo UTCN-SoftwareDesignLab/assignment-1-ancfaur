@@ -32,9 +32,10 @@ public class Constants {
         public static final String USER_ROLE = "user_role";
         public static final String CLIENT_ACCOUNT = "client_account";
         public static final String BILL = "bill";
+        public static final String REPORT = "report";
      
 
-        public static final String[] ORDERED_TABLES_FOR_CREATION = new String[]{USER, ROLE, RIGHT, ROLE_RIGHT ,USER_ROLE, CLIENT, ACCOUNT, CLIENT_ACCOUNT, BILL};
+        public static final String[] ORDERED_TABLES_FOR_CREATION = new String[]{USER, ROLE, RIGHT, ROLE_RIGHT ,USER_ROLE, CLIENT, ACCOUNT, CLIENT_ACCOUNT, BILL, REPORT};
     }
 
     public static class Roles {
@@ -139,5 +140,15 @@ public class Constants {
     	bills.add(bill3);
     	bills.add(bill4);
     	return bills;
+    }
+    
+    public static class EMPLOYEE_OPERATION_TYPES {
+    	public static final String CREATE_CLIENT="create client";
+        public static final String UPDATE_CLIENT="update client";
+        public static final String CREATE_ACCOUNT="create account";
+        public static final String UPDATE_ACCOUNT="update account";
+        public static final String DELETE_ACCOUNT="delete account";
+        public static final String PROCESS_BILL = "process bill";
+        public static final String TRANSFER="transfer";
     }
 }

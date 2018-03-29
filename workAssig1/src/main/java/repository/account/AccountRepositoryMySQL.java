@@ -1,23 +1,17 @@
 package repository.account;
-
 import model.Account;
-import model.Role;
-import model.Transfer;
 import model.builders.AccountBuilder;
 import repository.EntityNotFoundException;
-
-import static database.Constants.Tables.USER_ROLE;
 import static database.Constants.Tables.CLIENT_ACCOUNT;
-import static database.Constants.Tables.ROLE_RIGHT;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class AccountRepositoryMySQL implements AccountRepository {
 
 	private final Connection connection;
-
+	
 	public AccountRepositoryMySQL(Connection connection) {
 		this.connection = connection;
 	}
@@ -171,18 +165,5 @@ public class AccountRepositoryMySQL implements AccountRepository {
 	@Override
 	public boolean delete(Long clientId, Long accountId) {
 	return deleteAccountClientRelation(clientId, accountId) && deleteAccount(accountId);
-	}
-
-	@Override
-	public boolean transfer(Transfer transfer)  {
-		Account source = transfer.getSource();
-		Account dest = transfer.getDestination();
-		
-		source.setBalance(source.getBalance() -transfer.getAmount());
-		dest.setBalance(dest.getBalance()+ transfer.getAmount());
-		update(source);
-		update(dest);
-		return true;
-		
 	}
 }

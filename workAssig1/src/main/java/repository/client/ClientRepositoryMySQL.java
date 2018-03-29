@@ -18,9 +18,9 @@ public class ClientRepositoryMySQL implements ClientRepository {
     private final Connection connection;
     private final AccountRepository accountRepository;
 
-    public ClientRepositoryMySQL(Connection connection) {
+    public ClientRepositoryMySQL(Connection connection, AccountRepository accountRepository) {
         this.connection = connection;
-        accountRepository= new AccountRepositoryMySQL(connection);
+        this.accountRepository=accountRepository;
     }
 
     @Override
@@ -51,15 +51,26 @@ public class ClientRepositoryMySQL implements ClientRepository {
             clientResultSet.next();
             Long clientId = clientResultSet.getLong("id");
             List<Account> accounts = accountRepository.findAccountsForClient(clientId);
-          
-            Client client = new ClientBuilder()
-            		.setId(clientId)
-            		.setCnp(clientResultSet.getString("cnp"))
-            		.setName(clientResultSet.getString("name"))
-            		.setAddress(clientResultSet.getString("address"))
-            		.setIdCard(clientResultSet.getLong("idCard"))
-            		.setAccounts(accounts)
-            		.build();
+            Client client = getClientFromResultSet(clientResultSet);
+            return client;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    
+    @Override
+    public Client findById(Long id) {
+    	Statement statement;
+        try {
+            statement = connection.createStatement();
+            String fetchClientSql = "Select * from " + CLIENT + " where `id`=\'" + id+ "\'";
+            ResultSet clientResultSet = statement.executeQuery(fetchClientSql);
+            clientResultSet.next();
+            List<Account> accounts = accountRepository.findAccountsForClient(id);
+            Client client = getClientFromResultSet(clientResultSet);
+            client.setAccounts(accounts);
             return client;
         } catch (SQLException e) {
             e.printStackTrace();

@@ -2,12 +2,14 @@ package service.account;
 
 import model.Account;
 import model.Bill;
+import model.Client;
 import model.validation.Notification;
 import repository.EntityNotFoundException;
 
 import java.util.List;
 
 public interface AccountService {
+	
 
     List<Account> findAll();
 
@@ -21,8 +23,8 @@ public interface AccountService {
     
     boolean delete(Long clientId, Long accountId);
     
-    public Notification<Boolean> transfer(Long sourceId, Long destinationId, float amount);
+    Notification<Boolean> transfer(Long sourceId, Long destinationId, float amount);
     
-    public Notification<Boolean> processBill(Bill bill, Account account);
+    Notification<Boolean> processBill(Bill bill, Account account);
 
 }

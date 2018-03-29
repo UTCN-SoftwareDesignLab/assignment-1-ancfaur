@@ -1,8 +1,11 @@
 package controller;
 
 import static database.Constants.Roles.EMPLOYEE;
+
+import model.Report;
 import model.User;
 import model.validation.Notification;
+import repository.report.ReportRepository;
 import repository.user.AuthenticationException;
 import repository.user.UserRepository;
 import service.user.AuthenticationService;
@@ -11,6 +14,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -19,14 +28,16 @@ public class AdministratorMainController {
 	private final AdministatorMainView administratorView;
 	private final UserRepository userRepository;
 	private final AuthenticationService authenticationService;
+	private final ReportRepository reportRepository;
 	private List<User> employees;
 	private User selectedUser;
 
 	public AdministratorMainController(AdministatorMainView administratorView, UserRepository userRepository,
-			AuthenticationService authenticationService) {
+			AuthenticationService authenticationService, ReportRepository reportRepository) {
 		this.administratorView = administratorView;
 		this.userRepository = userRepository;
 		this.authenticationService = authenticationService;
+		this.reportRepository = reportRepository;
 		this.employees = userRepository.findAllWithRole(EMPLOYEE);
 
 		fillJtableWithData();
@@ -39,6 +50,7 @@ public class AdministratorMainController {
 
 	}
 
+	
 	private void fillJtableWithData() {
 		administratorView.getTableModel().setRowCount(0);
 		for (User user : employees)
@@ -49,6 +61,19 @@ public class AdministratorMainController {
 	private void updateEmployeesList() {
 		this.employees = userRepository.findAllWithRole("employee");
 		fillJtableWithData();
+	}
+
+	private Date extractDateFromString(String dateString) {
+		DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+		Date date;
+		try {
+			date = df.parse(dateString);
+			return date;
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private class CreateButtonListener implements ActionListener {
@@ -77,7 +102,7 @@ public class AdministratorMainController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (selectedUser == null) {
-				JOptionPane.showMessageDialog(administratorView.getContentPane(),"No user selected");
+				JOptionPane.showMessageDialog(administratorView.getContentPane(), "No user selected");
 			} else {
 				Long userId = selectedUser.getId();
 				Notification<Boolean> updateNotification = authenticationService.updateUserAccount(
@@ -102,27 +127,37 @@ public class AdministratorMainController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (selectedUser == null) {
-				JOptionPane.showMessageDialog(administratorView.getContentPane(),"No user selected");
-		}else {
-			 userRepository.delete(selectedUser.getId());
-			 updateEmployeesList();
-			 refreshSelectedUser();
-			
-		}
+				JOptionPane.showMessageDialog(administratorView.getContentPane(), "No user selected");
+			} else {
+				userRepository.delete(selectedUser.getId());
+				updateEmployeesList();
+				refreshSelectedUser();
+
+			}
 		}
 	}
 
 	private void refreshSelectedUser() {
-		selectedUser =null;
+		selectedUser = null;
 		administratorView.setUsernameTextField("");
 		administratorView.setPasswordTextField("");
 	}
-	
+
 	private class ReportButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (selectedUser == null)
-				JOptionPane.showMessageDialog(administratorView.getContentPane(),"No user selected");
+			if (selectedUser == null) {
+				JOptionPane.showMessageDialog(administratorView.getContentPane(), "No user selected");
+				return;
+			}
+			Date startDate = extractDateFromString(administratorView.getStartDateTextField());
+			Date endDate = extractDateFromString(administratorView.getEndDateTextField());
+			List<Report> reports = reportRepository.findReports(selectedUser.getId(), startDate, endDate);
+			String allReports = "";
+			for (Report report : reports) {
+				allReports += report.toString();
+			}
+			administratorView.setTextAreaText(allReports);
 
 		}
 	}
@@ -134,7 +169,8 @@ public class AdministratorMainController {
 			int row = administratorView.getTable().rowAtPoint(evt.getPoint());
 			if (row >= 0) {
 				selectedUser = employees.get(row);
-				System.out.println("selected user:" + selectedUser.getId() + " " + selectedUser.getUsername()+ selectedUser.showListRoles());
+				System.out.println("selected user:" + selectedUser.getId() + " " + selectedUser.getUsername()
+						+ selectedUser.showListRoles());
 				administratorView.setUsernameTextField(selectedUser.getUsername());
 				administratorView.setPasswordTextField("********");
 			}
@@ -152,7 +188,16 @@ public class AdministratorMainController {
 		}
 
 		@Override
-		public void mouseExited(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {
+		}
 
 	}
+
+	public void setVisible(boolean b) {
+		administratorView.setVisible(b);
+
 	}
+
+	
+
+}

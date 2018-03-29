@@ -20,6 +20,10 @@ public class TransferView extends JFrame {
 	private JTextField sourceAccountTextField;
 	private JButton okBtn;
 	private JButton cancelBtn;
+	private JTextField dateTextField;
+	private JLabel lblDate;
+	private JTextField clientTextField;
+	private JLabel lblClientId;
 
 	public TransferView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,41 +34,63 @@ public class TransferView extends JFrame {
 		contentPane.setLayout(null);
 
 		JLabel lblPleaseTypeThe = new JLabel("Id of the destination account");
-		lblPleaseTypeThe.setBounds(43, 94, 152, 14);
+		lblPleaseTypeThe.setBounds(44, 121, 152, 14);
 		contentPane.add(lblPleaseTypeThe);
 
 		destAccountTextField = new JTextField();
-		destAccountTextField.setBounds(198, 91, 193, 20);
+		destAccountTextField.setBounds(199, 118, 193, 20);
 		contentPane.add(destAccountTextField);
 		destAccountTextField.setColumns(10);
 
 		JLabel lblAmount = new JLabel("Amount ");
-		lblAmount.setBounds(43, 131, 54, 14);
+		lblAmount.setBounds(44, 158, 54, 14);
 		contentPane.add(lblAmount);
 
 		amountTextField = new JTextField();
 		amountTextField.setColumns(10);
-		amountTextField.setBounds(198, 128, 193, 20);
+		amountTextField.setBounds(199, 155, 193, 20);
 		contentPane.add(amountTextField);
 
 		okBtn = new JButton("Ok");
-		okBtn.setBounds(66, 179, 89, 23);
+		okBtn.setBounds(67, 206, 89, 23);
 		contentPane.add(okBtn);
 
 		cancelBtn = new JButton("Cancel");
-		cancelBtn.setBounds(262, 179, 89, 23);
+		cancelBtn.setBounds(263, 206, 89, 23);
 		contentPane.add(cancelBtn);
 
 		sourceAccountTextField = new JTextField();
 		sourceAccountTextField.setColumns(10);
-		sourceAccountTextField.setBounds(198, 60, 193, 20);
+		sourceAccountTextField.setBounds(199, 87, 193, 20);
 		contentPane.add(sourceAccountTextField);
+		sourceAccountTextField.setEditable(false);
 
 		JLabel lblIdOfThe = new JLabel("Id of the source account");
-		lblIdOfThe.setBounds(43, 63, 152, 14);
+		lblIdOfThe.setBounds(44, 90, 152, 14);
 		contentPane.add(lblIdOfThe);
 		
-		setVisible(true);
+		dateTextField = new JTextField();
+		dateTextField.setBounds(91, 11, 86, 20);
+		contentPane.add(dateTextField);
+		dateTextField.setColumns(10);
+		dateTextField.setEditable(false);
+		
+		lblDate = new JLabel("Date");
+		lblDate.setBounds(43, 14, 46, 14);
+		contentPane.add(lblDate);
+		
+		clientTextField = new JTextField();
+		clientTextField.setEditable(false);
+		clientTextField.setColumns(10);
+		clientTextField.setBounds(93, 39, 86, 20);
+		clientTextField.setEditable(false);
+		contentPane.add(clientTextField);
+		
+		lblClientId = new JLabel("Client id");
+		lblClientId.setBounds(37, 42, 46, 14);
+		contentPane.add(lblClientId);
+		
+		setVisible(false);
 	}
 
 	public void setSourceTextField(String sourceId) {
@@ -89,5 +115,29 @@ public class TransferView extends JFrame {
 
 	public String getAmountTextField() {
 		return amountTextField.getText();
+	}
+	
+	public String getDateTextField() {
+		return dateTextField.getText();
+	}
+	
+	public void setDateTextField(String dateString) {
+		dateTextField.setText(dateString);
+	}
+	
+	public String getClientTextField() {
+		return clientTextField.getText();
+	}
+	
+	public void setClientTextField(String client) {
+		clientTextField.setText(client);
+	}
+
+	public void setDestTextField(String string) {
+		destAccountTextField.setText(string);
+	}
+	
+	public void setAmountTextField(String string) {
+		amountTextField.setText(string);
 	}
 }

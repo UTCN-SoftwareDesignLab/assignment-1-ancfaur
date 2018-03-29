@@ -1,30 +1,33 @@
 package controller;
 
-import model.Role;
 import model.User;
 import model.validation.Notification;
 import repository.user.AuthenticationException;
 import service.user.AuthenticationService;
-import view.AdministatorMainView;
-import view.EmployeeMainView;
 import view.LoginView;
-
 import javax.swing.*;
-
-import factory.ComponentFactory;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+
 
 public class LoginController {
+	private AdministratorMainController administratorController;
+	private EmployeeMainController employeeController;
+	
+	
 	private final LoginView loginView;
 	private final AuthenticationService authenticationService;
 
-	public LoginController(LoginView loginView, AuthenticationService authenticationService) {
+	public LoginController(LoginView loginView, AuthenticationService authenticationService, AdministratorMainController administratorController,
+			EmployeeMainController employeeController) {
+		
+		
 		this.loginView = loginView;
 		this.authenticationService = authenticationService;
 		loginView.setLoginButtonListener(new LoginButtonListener());
+	
+		this.administratorController = administratorController;
+		this.employeeController = employeeController;
 	}
 
 	private class LoginButtonListener implements ActionListener {
@@ -45,18 +48,23 @@ public class LoginController {
 				if (loginNotification.hasErrors()) {
 					JOptionPane.showMessageDialog(loginView.getContentPane(), loginNotification.getFormattedErrors());
 				} else {
-					ComponentFactory componentFactory = ComponentFactory.instance(new Boolean(false));
 					User user = loginNotification.getResult();
-					if (user.getRoles().get(0).getRole().equals("administrator"))
-						new AdministratorMainController(new AdministatorMainView(),
-								componentFactory.getUserRepository(), componentFactory.getAuthenticationService());
-					else
-						new EmployeeMainController(new EmployeeMainView(), componentFactory.getClientService(),
-								componentFactory.getAccountService(), componentFactory.getBillRepository());
+					if (user.getRoles().get(0).getRole().equals("administrator")) {
+						administratorController.setVisible(true);
+					}
+					else {
+						employeeController.setUser(user);
+						employeeController.seVisible(true);
+					}
+						
 
 				}
 			}
 		}
+	}
+	
+	public void setVisible(Boolean val) {
+		loginView.setVisible(val);
 	}
 
 }

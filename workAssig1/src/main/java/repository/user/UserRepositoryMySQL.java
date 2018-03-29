@@ -38,7 +38,9 @@ public class UserRepositoryMySQL implements UserRepository {
 					+ password + "\'";
 			ResultSet userResultSet = statement.executeQuery(fetchUserSql);
 			if (userResultSet.next()) {
-				User user = new UserBuilder().setUsername(userResultSet.getString("username"))
+				User user = new UserBuilder()
+						.setId(userResultSet.getLong("id"))
+						.setUsername(userResultSet.getString("username"))
 						.setPassword(userResultSet.getString("password"))
 						.setRoles(rightsRolesRepository.findRolesForUser(userResultSet.getLong("id"))).build();
 				findByUsernameAndPasswordNotification.setResult(user);

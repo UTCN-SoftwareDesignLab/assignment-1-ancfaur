@@ -9,6 +9,8 @@ public interface ClientRepository {
     List<Client> findAll();
 
     Client findByCnp(String cnp);
+    
+    Client findById(Long id);
 
     boolean save(Client client);
 

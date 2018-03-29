@@ -37,7 +37,7 @@ public class Bootstrap {
 	private static BillRepository billRepository;
 
 	public static void main(String[] args) throws SQLException {
-		//dropAll();
+		dropAll();
 
 		bootstrapTables();
 
@@ -57,6 +57,8 @@ public class Bootstrap {
 			String[] dropSQL = { "TRUNCATE `role_right`; \n", "DROP TABLE `role_right`; \n",
 
 					"TRUNCATE `right`; \n", "DROP TABLE `right`; \n",
+					
+					"TRUNCATE `report`; \n", "DROP TABLE `report`;",
 
 					"TRUNCATE `user_role`; \n", "DROP TABLE `user_role`; \n",
 
@@ -68,7 +70,12 @@ public class Bootstrap {
 
 					"TRUNCATE `client`; \n", "DROP TABLE `client`",
 
-					"TRUNCATE `user`; \n", "DROP TABLE `user`;" };
+					"TRUNCATE `user`; \n", "DROP TABLE `user`;",
+					
+					"TRUNCATE `bill`; \n", "DROP TABLE `bill`;",
+					
+					
+			};
 
 			for (String stmt : dropSQL) {
 				statement.execute(stmt);

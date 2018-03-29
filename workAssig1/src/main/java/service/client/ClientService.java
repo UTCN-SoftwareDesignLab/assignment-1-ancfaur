@@ -12,4 +12,6 @@ public interface ClientService {
 	 List<Client> findAll();
 	 
 	 Notification<Boolean>  updateClient(Long clientId, String cnp, String name, String address);
+	 
+	 Client findByCnp(String cnp);
 }

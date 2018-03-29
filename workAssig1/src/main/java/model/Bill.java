@@ -10,7 +10,11 @@ public class Bill {
 	private boolean paid;
 	
 	public String toString() {
-		return "Bill "+ id + " for "+ utility +" service of amount ="+amount+"\npayed: "+paid ;
+		return "BILL: "+ id +"\n"+
+				"UTILITY: " +utility+"\n"+
+				"AMOUNT: " +amount +"\n"+
+				"PAID: " +paid;
+				
 	}
 
 	public Long getId() {

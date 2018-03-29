@@ -27,7 +27,4 @@ public interface AccountRepository {
 
 	boolean delete(Long clientId, Long accountId);
 	
-	public boolean transfer(Transfer transfer);
-
-
 }

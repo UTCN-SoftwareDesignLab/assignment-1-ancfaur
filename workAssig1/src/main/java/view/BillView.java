@@ -20,36 +20,23 @@ public class BillView extends JFrame {
 	private JButton processBtn, cancelBtn, searchBtn;
 	private JTextArea textArea;
 	private JTextField billIdTextField;
+	private JTextField dateTextField;
+	private JLabel lblDate;
+	private JTextField accountTextField;
+	private JLabel lblAccoutId;
+	private JTextField clientTextField;
+	private JLabel lblClientId;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					BillView frame = new BillView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public BillView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 410, 200);
+		setBounds(100, 100, 410, 293);
 		showBill = new JPanel();
 		showBill.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(showBill);
 		showBill.setLayout(null);
 		
 		billIdTextField = new JTextField();
-		billIdTextField.setBounds(31, 22, 123, 20);
+		billIdTextField.setBounds(31, 121, 123, 20);
 		showBill.add(billIdTextField);
 		billIdTextField.setColumns(10);
 		
@@ -58,25 +45,63 @@ public class BillView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		searchBtn.setBounds(31, 50, 123, 23);
+		searchBtn.setBounds(31, 152, 123, 23);
 		showBill.add(searchBtn);
 		
 		processBtn = new JButton("Process");
-		processBtn.setBounds(31, 84, 123, 23);
+		processBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		processBtn.setBounds(31, 186, 123, 23);
 		showBill.add(processBtn);
 		
 		cancelBtn = new JButton("cancel");
-		cancelBtn.setBounds(31, 115, 123, 23);
+		cancelBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		cancelBtn.setBounds(31, 220, 123, 23);
 		showBill.add(cancelBtn);
 		
 		JLabel lblNewLabel = new JLabel("Bill Id");
-		lblNewLabel.setBounds(43, 11, 46, 14);
+		lblNewLabel.setBounds(31, 96, 46, 14);
 		showBill.add(lblNewLabel);
 		
 		textArea = new JTextArea();
-		textArea.setBounds(164, 20, 196, 106);
+		textArea.setBounds(177, 31, 196, 198);
 		showBill.add(textArea);
-		setVisible(true);
+		
+		dateTextField = new JTextField();
+		dateTextField.setColumns(10);
+		dateTextField.setBounds(87, 11, 65, 20);
+		showBill.add(dateTextField);
+		
+		lblDate = new JLabel("Date");
+		lblDate.setBounds(31, 11, 46, 14);
+		showBill.add(lblDate);
+		
+		accountTextField = new JTextField();
+		accountTextField.setColumns(10);
+		accountTextField.setBounds(87, 36, 65, 20);
+		accountTextField.setEditable(false);
+		showBill.add(accountTextField);
+		
+		
+		lblAccoutId = new JLabel("Accout id");
+		lblAccoutId.setBounds(31, 36, 46, 14);
+		showBill.add(lblAccoutId);
+		
+		clientTextField = new JTextField();
+		clientTextField.setColumns(10);
+		clientTextField.setBounds(87, 65, 65, 20);
+		clientTextField.setEditable(false);
+		showBill.add(clientTextField);
+		
+		lblClientId = new JLabel("Client id");
+		lblClientId.setBounds(31, 61, 46, 14);
+		showBill.add(lblClientId);
+		setVisible(false);
 	}
 
 	public String getBillIdTextField() {
@@ -99,6 +124,27 @@ public class BillView extends JFrame {
 	
 	public void setProcessBtnListener(ActionListener l) {
 		processBtn.addActionListener(l);
+	}
+	
+	public void setDateTextField(String dateString) {
+		dateTextField.setText(dateString);
+	}
+	
+	public String getDateTextField() {
+		return dateTextField.getText();
+	}
+
+
+	public void setClientTextField(String string) {
+		clientTextField.setText(string);	
+	}
+
+	public void setAccountTextField(String string) {
+		accountTextField.setText(string);
+	}
+
+	public void setBillTextField(String string) {
+		billIdTextField.setText("");
 	}
 	
 	

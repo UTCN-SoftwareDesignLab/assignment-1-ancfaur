@@ -20,6 +20,7 @@ import model.validation.UserValidator;
 import model.validation.Validator;
 import repository.EntityNotFoundException;
 import repository.account.AccountRepository;
+import repository.client.ClientRepository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -120,7 +121,11 @@ public class AccountServiceMySQL implements AccountService {
 				transferValidator.getErrors().forEach(transferNotification::addError);
 				transferNotification.setResult(Boolean.FALSE);
 			} else {
-				transferNotification.setResult(accountRepository.transfer(transfer));
+				Account source = transfer.getSource();
+				Account dest = transfer.getDestination();
+				source.setBalance(source.getBalance() - transfer.getAmount());
+				dest.setBalance(dest.getBalance()+ transfer.getAmount());
+				transferNotification.setResult(accountRepository.update(source) && accountRepository.update(dest));
 			}
 
 		}
@@ -141,6 +146,6 @@ public class AccountServiceMySQL implements AccountService {
 		}
 		return notification;
 	}
-
+	
 
 }
