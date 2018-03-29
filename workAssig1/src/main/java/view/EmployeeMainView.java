@@ -96,7 +96,7 @@ public class EmployeeMainView extends JFrame {
 		updateClientBtn.setBounds(30, 264, 132, 23);
 		contentPane.add(updateClientBtn);
 		
-		Object[] clientColumns = {"Name", "Cnp", "Address" , "Id Card"};
+		Object[] clientColumns = {"Id", "Name", "Cnp", "Address" , "Id Card"};
 		clientsTableModel = new DefaultTableModel(clientColumns, 0);
 		
 		clientsTable = new JTable(clientsTableModel);

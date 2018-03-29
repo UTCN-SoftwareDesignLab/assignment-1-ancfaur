@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,6 +29,7 @@ public class AdministatorMainView extends JFrame {
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JScrollPane tableScroll;
+	private JScrollPane textScroll;
 	private JButton createEmployeeBtn;
 	private JButton updateEmployeeBtn;
 	private JButton deleteEmployeeBtn;
@@ -85,12 +87,14 @@ public class AdministatorMainView extends JFrame {
 		tableScroll.setBounds(280, 36, 236, 180);
 		contentPane.add(tableScroll);
 	
-		
 	
-		    
 		textArea = new JTextArea();
 		textArea.setBounds(29, 289, 218, 76);
-		contentPane.add(textArea);
+		
+		textScroll = new JScrollPane(textArea);
+		textScroll.setBounds(29, 289, 218, 76);
+		textScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		contentPane.add(textScroll);
 		
 		usernameTextField = new JTextField();
 		usernameTextField.setBounds(280, 266, 236, 20);

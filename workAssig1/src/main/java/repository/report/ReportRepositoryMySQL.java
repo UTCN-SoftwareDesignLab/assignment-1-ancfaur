@@ -1,6 +1,7 @@
 package repository.report;
 
 import static database.Constants.Tables.REPORT;
+import static database.Constants.Tables.USER;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,7 +35,7 @@ public class ReportRepositoryMySQL implements ReportRepository {
 	            insertStatement.setDate(2, new java.sql.Date(report.getDate().getTime()));
 	            insertStatement.setLong(3, report.getClientId());
 	            insertStatement.setString(4, report.getOperationType());
-	            insertStatement.executeUpdate();
+	            insertStatement.executeQuery();
 
 	            ResultSet rs = insertStatement.getGeneratedKeys();
 	            rs.next();
@@ -61,18 +62,21 @@ public class ReportRepositoryMySQL implements ReportRepository {
 
 	@Override
 	public List<Report> findReports(Long userId, Date startDate, Date endDate) {
-		Statement statement;
+		List<Report> reports = new ArrayList<>();
+		System.out.println("Search for reports");
         try {
-        
-            statement = connection.createStatement();
-            String fetchSql = "Select * from report WHERE user_id= " + userId + " AND date >= " + startDate +" AND date<= " + endDate;
-            ResultSet rs = statement.executeQuery(fetchSql);
-            
-            List<Report> reports = new ArrayList<>();
-            while(rs.next()) {
-            	Report report = getReportFromResultSet(rs);
+        	java.sql.Date start = new java.sql.Date(startDate.getTime());
+        	java.sql.Date end = new java.sql.Date(endDate.getTime());
+        	Statement statement = connection.createStatement();
+			String fetchReportsSql = "Select * from report where user_id= " + userId.toString() + " and date >= '" +start.toString() +"' and date <= '"+end.toString()+"'";
+			System.out.println(fetchReportsSql);
+			ResultSet rs= statement.executeQuery(fetchReportsSql);
+			while(rs.next()) {
+				Report report = getReportFromResultSet(rs);
             	reports.add(report);
-            }
+			}
+			if (reports.size()!=0) System.out.println("am gasit reports, yay");
+			else System.out.println("nu-s rapoarte, asta e");
             return reports;
         } catch (SQLException e) {
             e.printStackTrace();

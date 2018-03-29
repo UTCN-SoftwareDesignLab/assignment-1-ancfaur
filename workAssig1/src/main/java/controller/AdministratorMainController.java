@@ -64,14 +64,14 @@ public class AdministratorMainController {
 	}
 
 	private Date extractDateFromString(String dateString) {
-		DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-d");
 		Date date;
 		try {
 			date = df.parse(dateString);
 			return date;
 		} catch (ParseException e) {
-
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(administratorView.getContentPane(),
+					"Please insert dates of format YYYY-MM-DD");
 		}
 		return null;
 	}

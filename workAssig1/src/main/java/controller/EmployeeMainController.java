@@ -87,7 +87,7 @@ public class EmployeeMainController {
 		employeeView.getClientsTableModel().setRowCount(0);
 		for (Client client : clients)
 			employeeView.getClientsTableModel().addRow(
-					new Object[] { client.getName(), client.getCnp(), client.getAddress(), client.getIdCard() });
+					new Object[] { client.getId(), client.getName(), client.getCnp(), client.getAddress(), client.getIdCard() });
 
 	}
 
@@ -120,14 +120,14 @@ public class EmployeeMainController {
 	}
 
 	private Date extractDateFromString(String dateString) {
-		DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-d");
 		Date date;
 		try {
 			date = df.parse(dateString);
 			return date;
 		} catch (ParseException e) {
-
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(employeeView.getContentPane(),
+					"Please insert dates of format YYYY-MM-DD");
 		}
 		return null;
 	}
