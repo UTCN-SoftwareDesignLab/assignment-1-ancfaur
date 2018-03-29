@@ -11,15 +11,15 @@ import java.awt.event.ActionListener;
 
 
 public class LoginController {
-	private AdministratorMainController administratorController;
-	private EmployeeMainController employeeController;
+	private AdministratorController administratorController;
+	private EmployeeController employeeController;
 	
 	
 	private final LoginView loginView;
 	private final AuthenticationService authenticationService;
 
-	public LoginController(LoginView loginView, AuthenticationService authenticationService, AdministratorMainController administratorController,
-			EmployeeMainController employeeController) {
+	public LoginController(LoginView loginView, AuthenticationService authenticationService, AdministratorController administratorController,
+			EmployeeController employeeController) {
 		
 		
 		this.loginView = loginView;

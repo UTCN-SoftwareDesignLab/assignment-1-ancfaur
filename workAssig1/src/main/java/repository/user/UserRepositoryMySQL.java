@@ -1,16 +1,13 @@
 package repository.user;
 
-import model.Client;
 import model.Role;
 import model.User;
-import model.builders.ClientBuilder;
 import model.builders.UserBuilder;
 import model.validation.Notification;
 import repository.security.RightsRolesRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static database.Constants.Tables.USER;

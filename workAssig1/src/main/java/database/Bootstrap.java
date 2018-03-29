@@ -11,13 +11,10 @@ import repository.user.UserRepositoryMySQL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import model.Bill;
-import model.Role;
 import model.User;
 
 import static database.Constants.Rights.RIGHTS;
@@ -37,7 +34,7 @@ public class Bootstrap {
 	private static BillRepository billRepository;
 
 	public static void main(String[] args) throws SQLException {
-		dropAll();
+		//dropAll();
 
 		bootstrapTables();
 
@@ -148,18 +145,16 @@ public class Bootstrap {
 
 	private static void bootstrapUserRoles() throws SQLException {
 		Map<User, String> user_role = getPredefinedUsers();
-		Iterator<?> it = user_role.entrySet().iterator();
 		AuthenticationService authenticationService = new AuthenticationServiceMySQL(userRepository,
 				rightsRolesRepository);
-		while (it.hasNext()) {
-			Map.Entry pair = (Map.Entry) it.next();
-			String username = ((User) pair.getKey()).getUsername();
-			String password = ((User) pair.getKey()).getPassword();
-			String roleName = (String) pair.getValue();
-			System.out.println("I will register new users");
+		for (Map.Entry<User, String> pair : user_role.entrySet())
+		{
+			String username = pair.getKey().getUsername();
+			String password = pair.getKey().getPassword();
+			String roleName = pair.getValue();
 			authenticationService.register(username, password, roleName);
-			it.remove();
 		}
+			
 	}
 
 	private static void bootstrapBills() throws SQLException {

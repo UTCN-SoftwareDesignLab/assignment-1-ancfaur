@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Date;
-
 public class Bill {
 
 	private Long id;

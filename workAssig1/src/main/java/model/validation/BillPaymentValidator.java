@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.BillPayment;
-import model.Client;
 
 public class BillPaymentValidator implements Validator{
 

@@ -5,7 +5,11 @@ package repository;
  */
 public class EntityNotFoundException extends Exception {
 
-    private Long entityId;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Long entityId;
     private String entityClass;
 
     public EntityNotFoundException(Long entityId, String entityClass) {

@@ -6,7 +6,6 @@ import model.Report;
 import model.User;
 import model.validation.Notification;
 import repository.report.ReportRepository;
-import repository.user.AuthenticationException;
 import repository.user.UserRepository;
 import service.user.AuthenticationService;
 import view.AdministatorMainView;
@@ -17,14 +16,12 @@ import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
-public class AdministratorMainController {
+public class AdministratorController {
 	private final AdministatorMainView administratorView;
 	private final UserRepository userRepository;
 	private final AuthenticationService authenticationService;
@@ -32,7 +29,7 @@ public class AdministratorMainController {
 	private List<User> employees;
 	private User selectedUser;
 
-	public AdministratorMainController(AdministatorMainView administratorView, UserRepository userRepository,
+	public AdministratorController(AdministatorMainView administratorView, UserRepository userRepository,
 			AuthenticationService authenticationService, ReportRepository reportRepository) {
 		this.administratorView = administratorView;
 		this.userRepository = userRepository;
@@ -53,9 +50,9 @@ public class AdministratorMainController {
 	
 	private void fillJtableWithData() {
 		administratorView.getTableModel().setRowCount(0);
-		for (User user : employees)
+		for (User user : employees) {
 			administratorView.getTableModel().addRow(new Object[] { user.getUsername(), user.showListRoles() });
-
+		}
 	}
 
 	private void updateEmployeesList() {

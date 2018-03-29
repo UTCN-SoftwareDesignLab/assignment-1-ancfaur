@@ -1,8 +1,5 @@
 package repository.report;
 
-import static database.Constants.Tables.REPORT;
-import static database.Constants.Tables.USER;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,10 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import model.Account;
-import model.Client;
 import model.Report;
-import model.builders.ClientBuilder;
 import model.builders.ReportBuilder;
 
 
@@ -35,7 +29,7 @@ public class ReportRepositoryMySQL implements ReportRepository {
 	            insertStatement.setDate(2, new java.sql.Date(report.getDate().getTime()));
 	            insertStatement.setLong(3, report.getClientId());
 	            insertStatement.setString(4, report.getOperationType());
-	            insertStatement.executeQuery();
+	            insertStatement.executeUpdate();
 
 	            ResultSet rs = insertStatement.getGeneratedKeys();
 	            rs.next();

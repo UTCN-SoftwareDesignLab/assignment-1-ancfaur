@@ -1,6 +1,5 @@
 package controller;
 
-import static database.Constants.Roles.EMPLOYEE;
 import static database.Constants.EMPLOYEE_OPERATION_TYPES.*;
 
 import java.awt.event.ActionEvent;
@@ -10,7 +9,6 @@ import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,24 +17,15 @@ import javax.swing.JOptionPane;
 import model.Account;
 import model.Client;
 import model.Report;
-import model.Transfer;
 import model.User;
-import model.builders.AccountBuilder;
 import model.builders.ReportBuilder;
 import model.validation.Notification;
-import repository.account.AccountRepository;
-import repository.bill.BillRepository;
-import repository.client.ClientRepository;
 import repository.report.ReportRepository;
-import repository.user.UserRepository;
 import service.account.AccountService;
 import service.client.ClientService;
-import view.AdministatorMainView;
-import view.BillView;
 import view.EmployeeMainView;
-import view.TransferView;
 
-public class EmployeeMainController {
+public class EmployeeController {
 	private final EmployeeMainView employeeView;
 	private final ClientService clientService;
 	private final AccountService accountService;
@@ -50,7 +39,7 @@ public class EmployeeMainController {
 	private BillController billController;
 	private TransferController transferController;
 
-	public EmployeeMainController(EmployeeMainView employeeView, ClientService clientService,
+	public EmployeeController(EmployeeMainView employeeView, ClientService clientService,
 			AccountService accountService, ReportRepository reportRepository,
 			BillController billController, TransferController transferController) {
 		this.employeeView = employeeView;

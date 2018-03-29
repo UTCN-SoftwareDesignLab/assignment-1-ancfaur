@@ -3,28 +3,18 @@ package service.account;
 import model.Account;
 import model.Bill;
 import model.BillPayment;
-import model.Client;
-import model.Role;
 import model.Transfer;
-import model.User;
 import model.builders.AccountBuilder;
-import model.builders.ClientBuilder;
 import model.builders.TransferBuilder;
-import model.builders.UserBuilder;
 import model.validation.AccountValidator;
 import model.validation.BillPaymentValidator;
-import model.validation.ClientValidator;
 import model.validation.Notification;
 import model.validation.TransferValidator;
-import model.validation.UserValidator;
 import model.validation.Validator;
 import repository.EntityNotFoundException;
 import repository.account.AccountRepository;
-import repository.client.ClientRepository;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 

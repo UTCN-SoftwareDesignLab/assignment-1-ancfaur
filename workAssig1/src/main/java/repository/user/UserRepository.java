@@ -1,7 +1,6 @@
 package repository.user;
 
 
-import model.Role;
 import model.User;
 import model.validation.Notification;
 import java.util.List;

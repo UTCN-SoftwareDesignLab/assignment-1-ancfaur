@@ -108,6 +108,7 @@ public class BillController {
 							billRepository.updateStatus(selectedBill);
 							Report report = new ReportBuilder().setUserId(userId).setClientId(clientId).setDate(date)
 									.setClientId(clientId).setOperationType(PROCESS_BILL).build();
+							System.out.println(report.toString());
 							reportRepository.save(report);
 							billView.setVisible(false);
 							billView.dispose();
@@ -125,5 +126,6 @@ public class BillController {
 
 	public void cleanView() {
 		billView.setBillTextField("");	
+		billView.setTextArea("");
 	}
 }

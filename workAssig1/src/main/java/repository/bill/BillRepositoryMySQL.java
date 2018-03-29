@@ -5,10 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Random;
-import model.Account;
 import model.Bill;
-import model.Client;
 import model.builders.BillBuilder;
 import repository.EntityNotFoundException;
 
@@ -49,7 +46,6 @@ public class BillRepositoryMySQL implements BillRepository {
 					.setBillUtility(rs.getString(3)).setPaidStatus(val).build();
 			return bill;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

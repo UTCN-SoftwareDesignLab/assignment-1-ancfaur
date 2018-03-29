@@ -1,10 +1,8 @@
 package repository.client;
 import model.Account;
 import model.Client;
-import model.User;
 import model.builders.ClientBuilder;
 import repository.account.AccountRepository;
-import repository.account.AccountRepositoryMySQL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +50,7 @@ public class ClientRepositoryMySQL implements ClientRepository {
             Long clientId = clientResultSet.getLong("id");
             List<Account> accounts = accountRepository.findAccountsForClient(clientId);
             Client client = getClientFromResultSet(clientResultSet);
+            client.setAccounts(accounts);
             return client;
         } catch (SQLException e) {
             e.printStackTrace();

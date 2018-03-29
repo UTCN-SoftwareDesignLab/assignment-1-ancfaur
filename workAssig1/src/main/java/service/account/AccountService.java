@@ -2,7 +2,6 @@ package service.account;
 
 import model.Account;
 import model.Bill;
-import model.Client;
 import model.validation.Notification;
 import repository.EntityNotFoundException;
 

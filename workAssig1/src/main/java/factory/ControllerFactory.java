@@ -1,16 +1,5 @@
 package factory;
 import controller.*;
-import repository.bill.BillRepository;
-import repository.report.ReportRepository;
-import repository.user.UserRepository;
-import service.account.AccountService;
-import service.client.ClientService;
-import service.user.AuthenticationService;
-import view.AdministatorMainView;
-import view.BillView;
-import view.EmployeeMainView;
-import view.LoginView;
-import view.TransferView;
 
 public class ControllerFactory {
 
@@ -20,8 +9,8 @@ public class ControllerFactory {
 	
 
 	private LoginController loginController;
-	private AdministratorMainController administratorController;
-	private EmployeeMainController employeeController;
+	private AdministratorController administratorController;
+	private EmployeeController employeeController;
 	private TransferController transferController;
 	private BillController billController;
 	
@@ -45,12 +34,12 @@ public class ControllerFactory {
         this.transferController = new TransferController(viewFactory.getTransferView(), serviceFactory.getAccountService(), serviceFactory.getReportRepository());
         
         
-        this.employeeController = new EmployeeMainController(viewFactory.getEmployeeView(), serviceFactory.getClientService(),
+        this.employeeController = new EmployeeController(viewFactory.getEmployeeView(), serviceFactory.getClientService(),
         		serviceFactory.getAccountService(), serviceFactory.getReportRepository(), 
         		this.billController, this.transferController);
         
         
-        this.administratorController = new AdministratorMainController(viewFactory.getAdministrationView(),
+        this.administratorController = new AdministratorController(viewFactory.getAdministrationView(),
         		serviceFactory.getUserRepository(), serviceFactory.getAuthenticationService(),
         		serviceFactory.getReportRepository());
         

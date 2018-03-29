@@ -1,9 +1,6 @@
 package repository.account;
 
 import model.Account;
-import model.Bill;
-import model.Client;
-import model.Transfer;
 import repository.EntityNotFoundException;
 
 import java.util.List;

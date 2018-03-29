@@ -1,14 +1,10 @@
 package service.client;
 
-import java.util.Collections;
 import java.util.List;
 
 import model.Client;
-import model.User;
 import model.builders.ClientBuilder;
-import model.builders.UserBuilder;
 import model.validation.Notification;
-import model.validation.UserValidator;
 import repository.client.ClientRepository;
 import model.validation.ClientValidator;
 
