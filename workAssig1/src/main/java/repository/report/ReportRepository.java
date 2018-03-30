@@ -8,5 +8,6 @@ import model.Report;
 public interface ReportRepository {
 	
 	boolean save(Report report);
-	public List<Report> findReports(Long userId, Date startDate, Date endDate);
+	List<Report> findReports(Long userId, Date startDate, Date endDate);
+	void removeAll();
 }

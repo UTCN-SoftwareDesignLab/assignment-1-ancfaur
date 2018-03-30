@@ -26,7 +26,7 @@ public class ClientRepositoryMySQL implements ClientRepository {
     	 List<Client> clients = new ArrayList<>();
          try {
              Statement statement = connection.createStatement();
-             String sql = "Select * from client";
+             String sql = "Select * from client where id";
              ResultSet rs = statement.executeQuery(sql);
 
              while (rs.next()) {
@@ -44,7 +44,8 @@ public class ClientRepositoryMySQL implements ClientRepository {
     	Statement statement;
         try {
             statement = connection.createStatement();
-            String fetchClientSql = "Select * from " + CLIENT + " where `cnp`=\'" + cnp + "\'";
+            String fetchClientSql = "Select * from " + CLIENT + " where cnp=\'" + cnp + "\'";
+            System.out.println(fetchClientSql);
             ResultSet clientResultSet = statement.executeQuery(fetchClientSql);
             clientResultSet.next();
             Long clientId = clientResultSet.getLong("id");
@@ -94,6 +95,11 @@ public class ClientRepositoryMySQL implements ClientRepository {
             rs.next();
             long clientId = rs.getLong(1);
             client.setId(clientId);
+            List<Account> accounts = client.getAccounts();
+            
+            for (Account account: accounts) {
+            	accountRepository.addAccountToClient(account, client.getId());
+            }
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -107,7 +113,9 @@ public class ClientRepositoryMySQL implements ClientRepository {
         try {
             Statement statement = connection.createStatement();
             String sql = "DELETE from client where id >= 0";
+            String sqlResetIncrement = "ALTER TABLE "+CLIENT+" AUTO_INCREMENT = 1";
             statement.executeUpdate(sql);
+            statement.executeUpdate(sqlResetIncrement);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -1,7 +1,11 @@
 package database;
 
+import repository.account.AccountRepository;
+import repository.account.AccountRepositoryMySQL;
 import repository.bill.BillRepository;
 import repository.bill.BillRepositoryMySQL;
+import repository.client.ClientRepository;
+import repository.client.ClientRepositoryMySQL;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 
@@ -15,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import model.Bill;
+import model.Client;
 import model.User;
 
 import static database.Constants.Rights.RIGHTS;
@@ -23,6 +28,7 @@ import static database.Constants.Schemas.SCHEMAS;
 import static database.Constants.getRolesRights;
 import static database.Constants.getPredefinedUsers;
 import static database.Constants.getPredefinedBills;
+import static database.Constants.getPredefinedClientsWithAccounts;
 
 import service.user.AuthenticationService;
 import service.user.AuthenticationServiceMySQL;
@@ -32,15 +38,19 @@ public class Bootstrap {
 	private static RightsRolesRepository rightsRolesRepository;
 	private static UserRepository userRepository;
 	private static BillRepository billRepository;
+	private static ClientRepository clientRepository;
+	private static AccountRepository accountRepository;
 
 	public static void main(String[] args) throws SQLException {
-		//dropAll();
+		dropAll();
 
 		bootstrapTables();
 
 		bootstrapUserData();
 
 		bootstrapBills();
+		
+		bootstrapClients();
 
 	}
 
@@ -169,6 +179,21 @@ public class Bootstrap {
 			}
 
 			
+		}
+	}
+	
+	private static void bootstrapClients() {
+		for (String schema : SCHEMAS) {
+			System.out.println("Bootstrapping clients for " + schema);
+
+			JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper(schema);
+			accountRepository=  new AccountRepositoryMySQL(connectionWrapper.getConnection());
+			clientRepository = new ClientRepositoryMySQL(connectionWrapper.getConnection(), accountRepository);
+			
+			List<Client> clients = getPredefinedClientsWithAccounts();
+			for(Client client:clients) {
+				clientRepository.save(client);
+			}
 		}
 	}
 }

@@ -63,14 +63,11 @@ public class ReportRepositoryMySQL implements ReportRepository {
         	java.sql.Date end = new java.sql.Date(endDate.getTime());
         	Statement statement = connection.createStatement();
 			String fetchReportsSql = "Select * from report where user_id= " + userId.toString() + " and date >= '" +start.toString() +"' and date <= '"+end.toString()+"'";
-			System.out.println(fetchReportsSql);
 			ResultSet rs= statement.executeQuery(fetchReportsSql);
 			while(rs.next()) {
 				Report report = getReportFromResultSet(rs);
             	reports.add(report);
 			}
-			if (reports.size()!=0) System.out.println("am gasit reports, yay");
-			else System.out.println("nu-s rapoarte, asta e");
             return reports;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,5 +76,18 @@ public class ReportRepositoryMySQL implements ReportRepository {
         return null;
 	}
 
+
+    @Override
+    public void removeAll() {
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "DELETE from report where id >= 0";
+            statement.executeUpdate(sql);
+            String sqlResetIncrement = "ALTER TABLE report AUTO_INCREMENT = 1";
+            statement.executeUpdate(sqlResetIncrement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 	
 }

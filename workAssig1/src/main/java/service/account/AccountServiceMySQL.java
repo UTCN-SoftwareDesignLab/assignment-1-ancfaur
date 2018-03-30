@@ -137,5 +137,8 @@ public class AccountServiceMySQL implements AccountService {
 		return notification;
 	}
 	
+	public void removeAll() {
+		accountRepository.removeAll();
+	}
 
 }

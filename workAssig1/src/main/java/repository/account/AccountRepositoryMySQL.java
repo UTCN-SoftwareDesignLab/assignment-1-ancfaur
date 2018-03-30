@@ -2,6 +2,7 @@ package repository.account;
 import model.Account;
 import model.builders.AccountBuilder;
 import repository.EntityNotFoundException;
+
 import static database.Constants.Tables.CLIENT_ACCOUNT;
 import java.sql.*;
 import java.util.ArrayList;
@@ -90,6 +91,8 @@ public class AccountRepositoryMySQL implements AccountRepository {
 			Statement statement = connection.createStatement();
 			String sql = "DELETE from account where id >= 0";
 			statement.executeUpdate(sql);
+			String sqlResetIncrement = "ALTER TABLE account AUTO_INCREMENT = 1";
+            statement.executeUpdate(sqlResetIncrement);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

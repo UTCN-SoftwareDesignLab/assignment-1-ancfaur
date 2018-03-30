@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface AccountService {
 	
-
+	void removeAll();
+	
     List<Account> findAll();
 
     Account findById(Long id) throws EntityNotFoundException;

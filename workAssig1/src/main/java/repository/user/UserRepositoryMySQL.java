@@ -144,6 +144,8 @@ public class UserRepositoryMySQL implements UserRepository {
 			Statement statement = connection.createStatement();
 			String sql = "DELETE from user where id >= 0";
 			statement.executeUpdate(sql);
+			String sqlResetIncrement = "ALTER TABLE user AUTO_INCREMENT = 1";
+            statement.executeUpdate(sqlResetIncrement);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

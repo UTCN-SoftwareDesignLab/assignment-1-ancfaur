@@ -1,7 +1,9 @@
 package service.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import model.Account;
 import model.Client;
 import model.builders.ClientBuilder;
 import model.validation.Notification;
@@ -18,7 +20,7 @@ public class ClientServiceMySQL implements ClientService {
 
 	@Override
 	public Notification<Boolean> register(String cnp, String name, String address) {
-		Client client = new ClientBuilder().setCnp(cnp).setName(name).setAddress(address).build();
+		Client client = new ClientBuilder().setCnp(cnp).setName(name).setAddress(address).setAccounts(new ArrayList<Account>()).build();
 
 		ClientValidator clientValidator = new ClientValidator(client);
 		boolean clientValid = clientValidator.validate();
