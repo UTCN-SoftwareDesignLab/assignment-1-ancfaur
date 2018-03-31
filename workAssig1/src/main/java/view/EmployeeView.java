@@ -15,7 +15,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 
-public class EmployeeMainView extends JFrame {
+public class EmployeeView extends JFrame {
 
 	/**
 	 * 
@@ -37,19 +37,24 @@ public class EmployeeMainView extends JFrame {
 	
 	private JButton createClientBtn;
 	private JButton updateClientBtn;
+	private JButton searchClientBtn;
+	private JButton showAllClientsBtn;
+	
 	private JButton createAccountBtn;
 	private JButton updateAccountBtn;
 	private JButton deleteAccountBtn;
+	
 	private JButton processBillBtn;
 	private JButton transferBtn;
 	
 	private JComboBox<String> typeCombo;
 	private JLabel lblCurrentDate;
 	
+	
 	/**
 	 * Create the frame.
 	 */
-	public EmployeeMainView() {
+	public EmployeeView() {
 		setTitle("Employee");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 602, 395);
@@ -86,12 +91,21 @@ public class EmployeeMainView extends JFrame {
 		contentPane.add(lblAddress);
 		
 		createClientBtn = new JButton("create client");
-		createClientBtn.setBounds(29, 224, 132, 23);
+		createClientBtn.setBounds(29, 187, 132, 23);
 		contentPane.add(createClientBtn);
 		
 		updateClientBtn = new JButton("update client");
-		updateClientBtn.setBounds(30, 264, 132, 23);
+		updateClientBtn.setBounds(29, 221, 132, 23);
 		contentPane.add(updateClientBtn);
+		
+		searchClientBtn = new JButton("search client");
+		searchClientBtn.setBounds(29, 272, 132, 23);
+		contentPane.add(searchClientBtn);
+		
+		showAllClientsBtn = new JButton("show all clients");
+		showAllClientsBtn.setBounds(29, 306, 132, 23);
+		contentPane.add(showAllClientsBtn);
+		
 		
 		Object[] clientColumns = {"Id", "Name", "Cnp", "Address" , "Id Card"};
 		clientsTableModel = new DefaultTableModel(clientColumns, 0);
@@ -187,6 +201,9 @@ public class EmployeeMainView extends JFrame {
 		lblCurrentDate = new JLabel("Date");
 		lblCurrentDate.setBounds(30, 3, 30, 14);
 		contentPane.add(lblCurrentDate);
+		
+		
+		
 
 		setVisible(false);
 	}
@@ -198,6 +215,16 @@ public class EmployeeMainView extends JFrame {
 
 	public void setUpdateClientBtnListener(ActionListener listener) {
 		updateClientBtn.addActionListener(listener);
+		
+	}
+	
+	public void setSearchClientBtnListener(ActionListener listener) {
+		searchClientBtn.addActionListener(listener);
+		
+	}
+	
+	public void setShowAllClientsBtnListener(ActionListener listener) {
+		showAllClientsBtn.addActionListener(listener);
 		
 	}
 
@@ -294,5 +321,4 @@ public class EmployeeMainView extends JFrame {
 	public String getDateTextField() {
 		return dateTextField.getText();
 	}
-	
 }

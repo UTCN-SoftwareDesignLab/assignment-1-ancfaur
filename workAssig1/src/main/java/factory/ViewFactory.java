@@ -4,8 +4,8 @@ import view.*;
 public class ViewFactory {
 
 	private static ViewFactory instance;
-	private AdministatorMainView administrationView;
-	private EmployeeMainView employeeView;
+	private AdministatorView administrationView;
+	private EmployeeView employeeView;
 	private LoginView loginView;
 	private TransferView transferView;
 	private BillView billView;
@@ -18,19 +18,19 @@ public class ViewFactory {
     }
 	
 	private ViewFactory() {
-		administrationView = new AdministatorMainView();
-		employeeView = new EmployeeMainView();
+		administrationView = new AdministatorView();
+		employeeView = new EmployeeView();
 		loginView = new LoginView();
 		transferView = new TransferView();
 		billView = new BillView();
 		
 	}
 
-	public AdministatorMainView getAdministrationView() {
+	public AdministatorView getAdministrationView() {
 		return administrationView;
 	}
 
-	public EmployeeMainView getEmployeeView() {
+	public EmployeeView getEmployeeView() {
 		return employeeView;
 	}
 

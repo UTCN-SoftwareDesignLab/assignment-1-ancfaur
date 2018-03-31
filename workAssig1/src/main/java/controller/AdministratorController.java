@@ -5,10 +5,12 @@ import static database.Constants.Roles.EMPLOYEE;
 import model.Report;
 import model.User;
 import model.validation.Notification;
+import model.validation.ResultFetchException;
 import repository.report.ReportRepository;
+import repository.user.AuthenticationException;
 import repository.user.UserRepository;
 import service.user.AuthenticationService;
-import view.AdministatorMainView;
+import view.AdministatorView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -16,20 +18,21 @@ import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
 public class AdministratorController {
-	private final AdministatorMainView administratorView;
+	private final AdministatorView administratorView;
 	private final UserRepository userRepository;
 	private final AuthenticationService authenticationService;
 	private final ReportRepository reportRepository;
 	private List<User> employees;
 	private User selectedUser;
 
-	public AdministratorController(AdministatorMainView administratorView, UserRepository userRepository,
+	public AdministratorController(AdministatorView administratorView, UserRepository userRepository,
 			AuthenticationService authenticationService, ReportRepository reportRepository) {
 		this.administratorView = administratorView;
 		this.userRepository = userRepository;
@@ -43,6 +46,8 @@ public class AdministratorController {
 		administratorView.setUpdateBtnListener(new UpdateButtonListener());
 		administratorView.setDeleteBtnListener(new DeleteButtonListener());
 		administratorView.setReportBtnListener(new ReportButtonListener());
+		administratorView.setSearchBtnListener(new SearchButtonListener());
+		administratorView.setShowAllBtnListener(new ShowAllButtonListener());
 		administratorView.setJtableListener(new TableListener());
 
 	}
@@ -71,6 +76,12 @@ public class AdministratorController {
 					"Please insert dates of format YYYY-MM-DD");
 		}
 		return null;
+	}
+
+	private void refreshSelectedUser() {
+		selectedUser = null;
+		administratorView.setUsernameTextField("");
+		administratorView.setPasswordTextField("");
 	}
 
 	private class CreateButtonListener implements ActionListener {
@@ -134,12 +145,7 @@ public class AdministratorController {
 		}
 	}
 
-	private void refreshSelectedUser() {
-		selectedUser = null;
-		administratorView.setUsernameTextField("");
-		administratorView.setPasswordTextField("");
-	}
-
+	
 	private class ReportButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -156,6 +162,29 @@ public class AdministratorController {
 			}
 			administratorView.setTextAreaText(allReports);
 
+		}
+	}
+	
+	private class ShowAllButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			updateEmployeesList();
+		}
+	}
+	
+	private class SearchButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String username = administratorView.getUsernameTextField();
+			try {
+				selectedUser = userRepository.findByUsername(username).getResult();
+			} catch (ResultFetchException | AuthenticationException e1) {
+				JOptionPane.showMessageDialog(administratorView.getContentPane(), "This username is not registered");
+				return;
+			}
+			employees = new ArrayList<>();
+			employees.add(selectedUser);
+			fillJtableWithData();
 		}
 	}
 

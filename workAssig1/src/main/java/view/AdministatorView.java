@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 import java.awt.Font;
 
-public class AdministatorMainView extends JFrame {
+public class AdministatorView extends JFrame {
 
 	/**
 	 * 
@@ -32,6 +32,8 @@ public class AdministatorMainView extends JFrame {
 	private JButton updateEmployeeBtn;
 	private JButton deleteEmployeeBtn;
 	private JButton generateReportBtn;
+	private JButton searchBtn;
+	private JButton showAllBtn;
 	private JTextArea textArea;
 	private JTextField usernameTextField;
 	private JTextField passwordTextField;
@@ -41,7 +43,7 @@ public class AdministatorMainView extends JFrame {
 	
 	
 	
-	public AdministatorMainView() {
+	public AdministatorView() {
 		setTitle("Administrator");
 		setBounds(100, 100, 571, 426);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -135,6 +137,14 @@ public class AdministatorMainView extends JFrame {
 		lblEndDate.setBounds(51, 252, 72, 14);
 		contentPane.add(lblEndDate);
 		
+		searchBtn = new JButton("search employee");
+		searchBtn.setBounds(263, 342, 130, 23);
+		contentPane.add(searchBtn);
+		
+		showAllBtn = new JButton("show all employee");
+		showAllBtn.setBounds(403, 342, 130, 23);
+		contentPane.add(showAllBtn);
+		
 		setVisible(false);
 		
 	}
@@ -155,6 +165,15 @@ public class AdministatorMainView extends JFrame {
 	public void setReportBtnListener(ActionListener reportButtonListener) {
 		generateReportBtn.addActionListener(reportButtonListener);	
 	}
+	
+	public void setSearchBtnListener(ActionListener listener) {
+		searchBtn.addActionListener(listener);
+	}
+	
+	public void setShowAllBtnListener(ActionListener listener) {
+		showAllBtn.addActionListener(listener);
+	}
+	
 	
 	
 	public DefaultTableModel getTableModel() {

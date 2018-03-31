@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,10 +24,10 @@ import model.validation.Notification;
 import repository.report.ReportRepository;
 import service.account.AccountService;
 import service.client.ClientService;
-import view.EmployeeMainView;
+import view.EmployeeView;
 
 public class EmployeeController {
-	private final EmployeeMainView employeeView;
+	private final EmployeeView employeeView;
 	private final ClientService clientService;
 	private final AccountService accountService;
 	private List<Client> clients;
@@ -39,7 +40,7 @@ public class EmployeeController {
 	private BillController billController;
 	private TransferController transferController;
 
-	public EmployeeController(EmployeeMainView employeeView, ClientService clientService,
+	public EmployeeController(EmployeeView employeeView, ClientService clientService,
 			AccountService accountService, ReportRepository reportRepository,
 			BillController billController, TransferController transferController) {
 		this.employeeView = employeeView;
@@ -54,6 +55,8 @@ public class EmployeeController {
 
 		employeeView.setCreateClientBtnListener(new CreateClientButtonListener());
 		employeeView.setUpdateClientBtnListener(new UpdateClientButtonListener());
+		employeeView.setSearchClientBtnListener(new SearchClientButtonListener());
+		employeeView.setShowAllClientsBtnListener(new ShowAllClientsBtnListener());
 
 		employeeView.setCreateAccountBtnListener(new CreateAccountButtonListener());
 		employeeView.setUpdateAccountBtnListener(new UpdateAccountButtonListener());
@@ -63,6 +66,8 @@ public class EmployeeController {
 
 		employeeView.setClientsTableListener(new ClientsTableListener());
 		employeeView.setAccountsTableListener(new AccountsTableListener());
+		
+		
 
 		fillClientTableWithData();
 	}
@@ -181,6 +186,28 @@ public class EmployeeController {
 					}
 				}
 			}
+		}
+	}
+	
+	private class SearchClientButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			String cnp = employeeView.getCnpTextField();
+			selectedClient = clientService.findByCnp(cnp);
+			if (selectedClient == null) {
+				JOptionPane.showMessageDialog(employeeView.getContentPane(), "This CNP is not registered");
+				return;
+			}
+			clients = new ArrayList<>();
+			clients.add(selectedClient);
+			accounts = accountService.findAccountsForClient(selectedClient.getId());
+			fillClientTableWithData();
+			fillAccountTableWithData();		
+		}
+	}
+	
+	private class ShowAllClientsBtnListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			updateClientsList();
 		}
 	}
 

@@ -51,6 +51,32 @@ public class UserRepositoryMySQL implements UserRepository {
 			throw new AuthenticationException();
 		}
 	}
+	
+	@Override
+	public Notification<User> findByUsername(String username)
+			throws AuthenticationException {
+		Notification<User> findByUsernameNotification = new Notification<>();
+		try {
+			Statement statement = connection.createStatement();
+			String fetchUserSql = "Select * from `" + USER + "` where `username`=\'" + username + "\'";
+			ResultSet userResultSet = statement.executeQuery(fetchUserSql);
+			if (userResultSet.next()) {
+				User user = new UserBuilder()
+						.setId(userResultSet.getLong("id"))
+						.setUsername(userResultSet.getString("username"))
+						.setPassword(userResultSet.getString("password"))
+						.setRoles(rightsRolesRepository.findRolesForUser(userResultSet.getLong("id"))).build();
+				findByUsernameNotification.setResult(user);
+				return findByUsernameNotification;
+			} else {
+				findByUsernameNotification.addError("Invalid username!");
+				return findByUsernameNotification;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new AuthenticationException();
+		}
+	}
 
 	public List<User> findAll() {
 		List<User> users = new ArrayList<>();

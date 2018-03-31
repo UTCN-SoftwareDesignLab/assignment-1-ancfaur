@@ -14,7 +14,9 @@ public interface UserRepository {
     
     List<User> findAllWithRole(String roleName);
 
-    Notification<User> findByUsernameAndPassword(String username, String password) throws AuthenticationException;;
+    Notification<User> findByUsernameAndPassword(String username, String password) throws AuthenticationException;
+    
+    Notification<User> findByUsername(String username) throws AuthenticationException;
     
     boolean save(User user);
     
