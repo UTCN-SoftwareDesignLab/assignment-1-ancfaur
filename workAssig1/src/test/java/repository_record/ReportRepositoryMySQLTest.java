@@ -4,6 +4,7 @@ import static database.Constants.EMPLOYEE_OPERATION_TYPES.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.Connection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -12,23 +13,67 @@ import org.junit.*;
 import database.DBConnectionFactory;
 import model.Report;
 import model.builders.ReportBuilder;
+import repository.account.AccountRepository;
+import repository.account.AccountRepositoryMySQL;
+import repository.client.ClientRepository;
+import repository.client.ClientRepositoryMySQL;
 import repository.report.ReportRepository;
 import repository.report.ReportRepositoryMySQL;
+import repository.security.RightsRolesRepository;
+import repository.security.RightsRolesRepositoryMySQL;
+import repository.user.UserRepository;
+import repository.user.UserRepositoryMySQL;
+import service.client.ClientService;
+import service.client.ClientServiceMySQL;
+import service.user.AuthenticationService;
+import service.user.AuthenticationServiceMySQL;
 
 public class ReportRepositoryMySQLTest {
 
 	private static ReportRepository reportRepository;
+	
+	// context
+	private static AuthenticationService authenticationService;
+	private static UserRepository userRepository;
+	private static ClientService clientService;
 
 	@BeforeClass
 	public static void setupClass() {
-		reportRepository = new ReportRepositoryMySQL(
-				new DBConnectionFactory().getConnectionWrapper(true).getConnection());
+		Connection connection = new DBConnectionFactory().getConnectionWrapper(true).getConnection();
+		reportRepository = new ReportRepositoryMySQL(connection);
+		
+		
+		// for context
+		AccountRepository accountRepository = new AccountRepositoryMySQL(connection);
+		ClientRepository clientRepository = new ClientRepositoryMySQL(connection, accountRepository);
+		clientService = new ClientServiceMySQL(clientRepository);
+		RightsRolesRepository rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
+		userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
+		authenticationService = new AuthenticationServiceMySQL(userRepository, rightsRolesRepository);
+		
+		
+		
 	}
 
 	@Before
 	public void cleanUp() {
 		reportRepository.removeAll();
 	}
+	
+
+	@Before
+	public void createUserAndClient() {
+		clientService.removeAll();
+		userRepository.removeAll();
+		
+		// create user1 and user2
+		authenticationService.register("username1@yahoo.com", "Password1#", "employee");
+		authenticationService.register("username2@yahoo.com", "Password1#", "employee");
+		
+		// create client
+		clientService.register("1234567891011", "george", "somewhere");
+	}
+
 
 	private Date getCurrentDate() {
 		Calendar cal = Calendar.getInstance();
@@ -45,8 +90,8 @@ public class ReportRepositoryMySQLTest {
 
 	@Test
 	public void findReportsWhenDbNotEmpty() throws Exception {
-		Long oneEmployeeId = new Long(3);
-		Long otherEmployeeId = new Long(4);
+		Long oneEmployeeId = new Long(1);
+		Long otherEmployeeId = new Long(2);
 
 		Report reportUser1 = new ReportBuilder().setUserId(oneEmployeeId).setDate(getCurrentDate())
 				.setClientId(new Long(1)).setOperationType(TRANSFER).build();

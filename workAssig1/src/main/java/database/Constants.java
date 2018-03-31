@@ -122,7 +122,7 @@ public class Constants {
 		bills.add(bill4);
 		return bills;
 	}
-
+/*
 	public static List<Client> getPredefinedClientsWithAccounts() {
 		List<Client> clients = new ArrayList<>();
 		Account account1 = new AccountBuilder().setBalance(500).setCreationDate(new Date()).setType("saving").build();
@@ -140,7 +140,7 @@ public class Constants {
 		clients.add(client2);
 		return clients;
 	}
-
+*/
 	public static class EMPLOYEE_OPERATION_TYPES {
 		public static final String CREATE_CLIENT = "create client";
 		public static final String UPDATE_CLIENT = "update client";

@@ -1,11 +1,7 @@
 package database;
 
-import repository.account.AccountRepository;
-import repository.account.AccountRepositoryMySQL;
 import repository.bill.BillRepository;
 import repository.bill.BillRepositoryMySQL;
-import repository.client.ClientRepository;
-import repository.client.ClientRepositoryMySQL;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 
@@ -19,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import model.Bill;
-import model.Client;
+//import model.Client;
 import model.User;
 
 import static database.Constants.Rights.RIGHTS;
@@ -28,7 +24,7 @@ import static database.Constants.Schemas.SCHEMAS;
 import static database.Constants.getRolesRights;
 import static database.Constants.getPredefinedUsers;
 import static database.Constants.getPredefinedBills;
-import static database.Constants.getPredefinedClientsWithAccounts;
+//import static database.Constants.getPredefinedClientsWithAccounts;
 
 import service.user.AuthenticationService;
 import service.user.AuthenticationServiceMySQL;
@@ -38,8 +34,8 @@ public class Bootstrap {
 	private static RightsRolesRepository rightsRolesRepository;
 	private static UserRepository userRepository;
 	private static BillRepository billRepository;
-	private static ClientRepository clientRepository;
-	private static AccountRepository accountRepository;
+	//private static ClientRepository clientRepository;
+	//private static AccountRepository accountRepository;
 
 	public static void main(String[] args) throws SQLException {
 		dropAll();
@@ -50,7 +46,7 @@ public class Bootstrap {
 
 		bootstrapBills();
 		
-		bootstrapClients();
+		// bootstrapClients();
 
 	}
 
@@ -125,6 +121,7 @@ public class Bootstrap {
 			bootstrapRoleRight();
 			bootstrapUserRoles();
 		}
+		
 	}
 
 	private static void bootstrapRoles() throws SQLException {
@@ -181,7 +178,7 @@ public class Bootstrap {
 			
 		}
 	}
-	
+	/*
 	private static void bootstrapClients() {
 		for (String schema : SCHEMAS) {
 			System.out.println("Bootstrapping clients for " + schema);
@@ -196,4 +193,5 @@ public class Bootstrap {
 			}
 		}
 	}
+	*/
 }

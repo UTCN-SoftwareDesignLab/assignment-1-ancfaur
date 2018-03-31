@@ -15,10 +15,17 @@ import model.builders.BillBuilder;
 import repository.EntityNotFoundException;
 import repository.account.AccountRepository;
 import repository.account.AccountRepositoryMySQL;
+import repository.client.ClientRepository;
+import repository.client.ClientRepositoryMySQL;
+import service.client.ClientService;
+import service.client.ClientServiceMySQL;
 
 public class AccountServiceMySQLTest {
 	private static AccountRepository accountRepository;
 	private static AccountService accountService;
+	
+	// for creating context
+	private static ClientService clientService;
 	
 	@BeforeClass
 	public static void setUp() {
@@ -26,12 +33,23 @@ public class AccountServiceMySQLTest {
 		accountRepository = new AccountRepositoryMySQL(connection);
 		accountService = new AccountServiceMySQL(accountRepository);
 		
+		//context
+		ClientRepository clientRepository = new ClientRepositoryMySQL(connection, accountRepository);
+		clientService = new ClientServiceMySQL(clientRepository);
+		
 	}
 	
 	@Before
 	public void cleanUp() {
 		accountService.removeAll();
 	}
+	
+	@Before
+	public void createOneClient() {
+		clientService.removeAll();
+		clientService.register("1234567891011", "gigel", "intr-o lume minunata");
+	}
+	
 	
 	@Test
 	public void findAll() {

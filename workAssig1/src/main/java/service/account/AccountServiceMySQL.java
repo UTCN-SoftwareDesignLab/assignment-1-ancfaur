@@ -41,7 +41,7 @@ public class AccountServiceMySQL implements AccountService {
 
 		Account account = new AccountBuilder().setBalance(balance).setCreationDate(creationDate).setType(type).build();
 
-		AccountValidator accountValidator = new AccountValidator(account);
+		Validator accountValidator = new AccountValidator(account);
 		boolean accountValid = accountValidator.validate();
 		Notification<Boolean> accountRegisterNotification = new Notification<>();
 

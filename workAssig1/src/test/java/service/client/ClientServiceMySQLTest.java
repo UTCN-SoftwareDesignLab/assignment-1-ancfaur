@@ -26,7 +26,7 @@ public class ClientServiceMySQLTest {
 
 	@Before
 	public void cleanUp() {
-		clientRepository.removeAll();
+		clientService.removeAll();
 	}
 
 	@Test

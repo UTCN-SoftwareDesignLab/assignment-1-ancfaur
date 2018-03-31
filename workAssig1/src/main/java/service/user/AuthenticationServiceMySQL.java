@@ -5,6 +5,7 @@ import model.User;
 import model.builders.UserBuilder;
 import model.validation.Notification;
 import model.validation.UserValidator;
+import model.validation.Validator;
 import repository.security.RightsRolesRepository;
 import repository.user.AuthenticationException;
 import repository.user.UserRepository;
@@ -60,7 +61,7 @@ public class AuthenticationServiceMySQL implements AuthenticationService {
                 .setRoles(Collections.singletonList(role))
                 .build();
 
-        UserValidator userValidator = new UserValidator(user);
+        Validator userValidator = new UserValidator(user);
         boolean userValid = userValidator.validate();
         Notification<Boolean> userRegisterNotification = new Notification<>();
 
@@ -82,7 +83,7 @@ public class AuthenticationServiceMySQL implements AuthenticationService {
 	                .setPassword(password)
 	                .build();
 
-	        UserValidator userValidator = new UserValidator(user);
+	        Validator userValidator = new UserValidator(user);
 	        boolean userValid = userValidator.validate();
 	        Notification<Boolean> userRegisterNotification = new Notification<>();
 	        if (!userValid) {
