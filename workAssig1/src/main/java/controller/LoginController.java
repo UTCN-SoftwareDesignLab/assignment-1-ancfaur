@@ -10,16 +10,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class LoginController {
-	private AdministratorController administratorController;
-	private EmployeeController employeeController;
+public class LoginController implements IController {
+	private IController administratorController;
+	private IEmployeeController employeeController;
 	
 	
 	private final LoginView loginView;
 	private final AuthenticationService authenticationService;
 
-	public LoginController(LoginView loginView, AuthenticationService authenticationService, AdministratorController administratorController,
-			EmployeeController employeeController) {
+	public LoginController(LoginView loginView, AuthenticationService authenticationService, IController administratorController,
+			IEmployeeController employeeController) {
 		
 		
 		this.loginView = loginView;
@@ -54,7 +54,7 @@ public class LoginController {
 					}
 					else {
 						employeeController.setUser(user);
-						employeeController.seVisible(true);
+						employeeController.setVisible(true);
 					}
 						
 
@@ -63,8 +63,11 @@ public class LoginController {
 		}
 	}
 	
-	public void setVisible(Boolean val) {
+
+	@Override
+	public void setVisible(boolean val) {
 		loginView.setVisible(val);
+		
 	}
 
 }

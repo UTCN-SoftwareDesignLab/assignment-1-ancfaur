@@ -24,7 +24,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-public class AdministratorController {
+public class AdministratorController implements IController{
 	private final AdministatorView administratorView;
 	private final UserRepository userRepository;
 	private final AuthenticationService authenticationService;

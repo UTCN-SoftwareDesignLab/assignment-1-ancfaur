@@ -8,11 +8,11 @@ public class ControllerFactory {
 	private ViewFactory viewFactory;
 	
 
-	private LoginController loginController;
-	private AdministratorController administratorController;
-	private EmployeeController employeeController;
-	private TransferController transferController;
-	private BillController billController;
+	private IController loginController;
+	private IController administratorController;
+	private IEmployeeController employeeController;
+	private  IBillTransferController transferController;
+	private  IBillTransferController billController;
 	
 	
 	
@@ -50,7 +50,7 @@ public class ControllerFactory {
         
     }
 
-	public LoginController getLoginController() {
+	public IController getLoginController() {
 		return loginController;
 	}
 

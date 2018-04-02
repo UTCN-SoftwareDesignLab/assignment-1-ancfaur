@@ -16,7 +16,7 @@ import repository.report.ReportRepository;
 import service.account.AccountService;
 import view.BillView;
 
-public class BillController {
+public class BillController implements IBillTransferController {
 
 	private BillView billView;
 	private AccountService accountService;

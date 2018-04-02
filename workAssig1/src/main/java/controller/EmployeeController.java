@@ -26,7 +26,7 @@ import service.account.AccountService;
 import service.client.ClientService;
 import view.EmployeeView;
 
-public class EmployeeController {
+public class EmployeeController implements IEmployeeController {
 	private final EmployeeView employeeView;
 	private final ClientService clientService;
 	private final AccountService accountService;
@@ -37,12 +37,12 @@ public class EmployeeController {
 	private User user;
 	private ReportRepository reportRepository;
 
-	private BillController billController;
-	private TransferController transferController;
+	private  IBillTransferController billController;
+	private  IBillTransferController transferController;
 
 	public EmployeeController(EmployeeView employeeView, ClientService clientService,
 			AccountService accountService, ReportRepository reportRepository,
-			BillController billController, TransferController transferController) {
+			 IBillTransferController billController,  IBillTransferController transferController) {
 		this.employeeView = employeeView;
 		this.clientService = clientService;
 		this.accountService = accountService;
@@ -385,7 +385,7 @@ public class EmployeeController {
 		}
 	}
 
-	public void seVisible(boolean b) {
+	public void setVisible(boolean b) {
 		employeeView.setVisible(true);
 		
 	}

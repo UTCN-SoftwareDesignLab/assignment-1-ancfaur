@@ -12,7 +12,7 @@ import repository.report.ReportRepository;
 import service.account.AccountService;
 import view.TransferView;
 
-public class TransferController {
+public class TransferController implements  IBillTransferController {
 
 	private TransferView transferView;
 	private AccountService accountService;
